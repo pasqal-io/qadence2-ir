@@ -13,9 +13,13 @@ class Alloc:
         trainable: Flag if the parameter can change during a training loop.
     """
 
-    def __init__(self, size: int, trainable: bool) -> None:
+    def __init__(self, size: int, trainable: bool, **attributes: Any) -> None:
         self.size = size
         self.is_trainable = trainable
+        self.attrs = attributes
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.size}, trainable={self.is_trainable})"
 
 
 class Assign:
@@ -25,12 +29,18 @@ class Assign:
         self.variable = variable_name
         self.value = value
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({repr(self.variable)}, {self.value})"
+
 
 class Load:
     """To recover the value of a given variable."""
 
     def __init__(self, variable_name: str) -> None:
         self.variable = variable_name
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({repr(self.variable)})"
 
 
 class Call:
@@ -41,6 +51,10 @@ class Call:
     def __init__(self, function_name: str, *args: Any) -> None:
         self.call = function_name
         self.args = args
+
+    def __repr__(self) -> str:
+        args = ", ".join(map(repr, self.args))
+        return f"{self.__class__.__name__}({repr(self.call)}, {args})"
 
 
 class Support:
@@ -75,6 +89,16 @@ class Support:
 
         return self.target == other.target and self.control == other.control
 
+    def __repr__(self) -> str:
+        if not self.target:
+            return f"{self.__class__.__name__}.target_all()"
+
+        subspace = f"target={self.target}"
+        if self.control:
+            subspace += f", control={self.control}"
+
+        return f"{self.__class__.__name__}({subspace})"
+
 
 class QuInstruct:
     """
@@ -90,10 +114,14 @@ class QuInstruct:
         self.name = name
         self.support = support
         self.args = args
-        self.attr = attributes
+        self.attrs = attributes
 
-    def get(self, attribute: str, default: Any | None = None) -> Any:
-        return self.attr.get(attribute, default)
+    def __repr__(self) -> str:
+        params = f"{repr(self.name)}, {self.support}"
+        args = ", ".join(map(repr, self.args))
+        if args:
+            params += ", " + args
+        return f"{self.__class__.__name__}({params})"
 
 
 class AllocQubits:
@@ -131,6 +159,10 @@ class AllocQubits:
         self.grid_scale = grid_scale
         self.options = options or dict()
 
+    def __repr__(self) -> str:
+        items = ", ".join(f"{k}={v}" for k, v in self.__dict__.items())
+        return f"{self.__class__.__name__}({items})"
+
 
 class Model:
     """
@@ -162,4 +194,30 @@ class Model:
         self.inputs = inputs
         self.instructions = instructions
         self.directives = directives or dict()
-        self.data_settings = data_settings or dict()
+        self.settings = data_settings or dict()
+
+    def __repr__(self) -> str:
+        indent = "  "
+        acc = f"{self.__class__.__name__}("
+
+        for field, value in self.__dict__.items():
+            if isinstance(value, AllocQubits):
+                acc += f"\n{indent}{field}={value.__class__.__name__}("
+                items = ",\n".join(
+                    f"{indent * 2}{k}={v}" for k, v in value.__dict__.items()
+                )
+                acc += (f"\n{items},\n{indent}" if items else "") + "),"
+
+            elif isinstance(value, dict):
+                acc += f"\n{indent}{field}={{"
+                items = ",\n".join(
+                    f"{indent * 2}{repr(k)}: {v}" for k, v in value.items()
+                )
+                acc += (f"\n{items},\n{indent}" if items else "") + "},"
+
+            elif isinstance(value, list):
+                acc += f"\n{indent}{field}=["
+                items = ",\n".join(f"{indent * 2}{item}" for item in self.instructions)
+                acc += (f"\n{items},\n{indent}" if items else "") + "],"
+
+        return acc + "\n)"
