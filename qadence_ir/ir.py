@@ -177,8 +177,8 @@ class Model:
         directives: A dictionary containing QPU related options. For instance,
             it can be used to set the Rydberg level to be used or whether to
             allow digital-analog operations in the sequence.
-        data_settings: Backend specific configurations where the user can define
-            for instance, the data type like `int64`, or the return type as
+        settings: Backend specific configurations where the user can define for
+            instance, the data type like `int64`, or the return type as
             "counting", "vector-state" or "density-matrix".
     """
 
@@ -188,13 +188,13 @@ class Model:
         inputs: dict[str, Alloc],
         instructions: list[QuInstruct | Assign],
         directives: dict[str, Any] | None = None,
-        data_settings: dict[str, Any] | None = None,
+        settings: dict[str, Any] | None = None,
     ) -> None:
         self.register = register
         self.inputs = inputs
         self.instructions = instructions
         self.directives = directives or dict()
-        self.settings = data_settings or dict()
+        self.settings = settings or dict()
 
     def __repr__(self) -> str:
         indent = "  "
