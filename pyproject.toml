@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "qadence_ir"
+name = "qadence2-ir"
 description = "Qadence 2 Intermediate Representation (IR) components."
 readme = "README.md"
 version = "0.1.0"
@@ -89,7 +89,7 @@ test = "mkdocs build --clean --strict"
 python = ["310", "311"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["qadence_ir"]
+packages = ["qadence2_ir"]
 
 [tool.coverage.run]
 branch = true

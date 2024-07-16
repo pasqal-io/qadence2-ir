@@ -19,7 +19,10 @@ class Alloc:
         self.attrs = attributes
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.size}, trainable={self.is_trainable})"
+        params = f"{self.size}, trainable={self.is_trainable}"
+        if self.attrs:
+            params += f", attrs={self.attrs}"
+        return f"{self.__class__.__name__}({params})"
 
 
 class Assign:
@@ -121,6 +124,8 @@ class QuInstruct:
         args = ", ".join(map(repr, self.args))
         if args:
             params += ", " + args
+        if self.attrs:
+            params += f", attrs={self.attrs}"
         return f"{self.__class__.__name__}({params})"
 
 
