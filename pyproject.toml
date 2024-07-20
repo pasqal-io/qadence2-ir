@@ -8,7 +8,7 @@ description = "Qadence 2 Intermediate Representation (IR) components."
 readme = "README.md"
 version = "0.1.1"
 requires-python = ">=3.10,<3.12"
-license = {text = "Proprietary"}
+license = { text = "Apache 2.0" }
 keywords = ["quantum"]
 authors = [
   { name = "Eduardo Maschio", email = "eduardo.maschio@pasqal.com" },
@@ -36,6 +36,7 @@ allow-ambiguous-features = true
 [project.optional-dependencies]
 extras = [
 ]
+
 [project.urls]
 # Documentation = "https://pqs.pages.pasqal.com/qadence2-ir/"
 Issues = "https://github.com/pasqal-io/qadence2-ir/issues"
@@ -51,8 +52,13 @@ dependencies = [
   "ipykernel",
   "pre-commit",
   "black",
-  "ruff"
+  "isort",
+  "ruff",
+  "pydocstringformatter",
 ]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest -n auto --cov-config=pyproject.toml --ignore=./tests/test_examples.py {args}"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -87,6 +93,15 @@ test = "mkdocs build --clean --strict"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["310", "311"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.gitignore",
+    "/.pre-commit-config.yml",
+    "/tests",
+    "/docs",
+    "/examples",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["qadence2_ir"]
@@ -124,6 +139,23 @@ max-complexity = 15
 
 [tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
 
 [tool.mypy]
 python_version = "3.10"
