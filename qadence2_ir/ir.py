@@ -208,16 +208,12 @@ class Model:
         for field, value in self.__dict__.items():
             if isinstance(value, AllocQubits):
                 acc += f"\n{indent}{field}={value.__class__.__name__}("
-                items = ",\n".join(
-                    f"{indent * 2}{k}={v}" for k, v in value.__dict__.items()
-                )
+                items = ",\n".join(f"{indent * 2}{k}={v}" for k, v in value.__dict__.items())
                 acc += (f"\n{items},\n{indent}" if items else "") + "),"
 
             elif isinstance(value, dict):
                 acc += f"\n{indent}{field}={{"
-                items = ",\n".join(
-                    f"{indent * 2}{repr(k)}: {v}" for k, v in value.items()
-                )
+                items = ",\n".join(f"{indent * 2}{repr(k)}: {v}" for k, v in value.items())
                 acc += (f"\n{items},\n{indent}" if items else "") + "},"
 
             elif isinstance(value, list):
