@@ -1,4 +1,7 @@
-# qadence2 ir
+# Qadence 2 IR
+
+Qadence 2 Intermediate Representation (IR) components.
+
 ## Installation
 Installation guidelines
 
