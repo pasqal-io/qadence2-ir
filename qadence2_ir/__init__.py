@@ -1,23 +1,14 @@
 from __future__ import annotations
 
-from .ir import (
-    Alloc,
-    AllocQubits,
-    Assign,
-    Call,
-    Load,
-    Model,
-    QuInstruct,
-    Support,
-)
+from .irbuilder import AbstractIRBuilder
+from .types import AllocQubits
+from .irast import Attributes, InputType
+from .factory import irc_factory
 
 __all__ = [
-    "Alloc",
+    "AbstractIRBuilder",
     "AllocQubits",
-    "Assign",
-    "Call",
-    "Load",
-    "Model",
-    "QuInstruct",
-    "Support",
+    "Attributes",
+    "InputType",
+    "irc_factory",
 ]
