@@ -1,3 +1,6 @@
+# TODO:
+# - [ ] docstrings
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
