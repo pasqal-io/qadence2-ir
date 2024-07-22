@@ -73,7 +73,7 @@ class AST:
     def sequence(cls, *args: Any) -> AST:
         return cls.__construct__(cls.Tag.Sequence, "", *args)
 
-    # Prdeicates
+    # Predicates
     @property
     def is_numeric(self) -> bool:
         return self.tag == AST.Tag.Numeric
