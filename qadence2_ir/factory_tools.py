@@ -29,7 +29,8 @@ def _extract_inputs_core(ast: AST, inputs: dict[str, Alloc]) -> None:
 
     else:
         for arg in ast.args:
-            _extract_inputs_core(arg, inputs)
+            if isinstance(arg, AST):
+                _extract_inputs_core(arg, inputs)
 
 
 def extract_instructions(ast: AST) -> list[QuInstruct | Assign]:
@@ -90,23 +91,19 @@ def _extract_classical_instructions(
     if ast.is_input_variable:
         return Load(ast.head), count
 
-    if ast.is_binary_op:
-        lhs, count = _extract_classical_instructions(ast.args[0], mem, instructions, count)
-        rhs, count = _extract_classical_instructions(ast.args[1], mem, instructions, count)
-
-        args = [lhs, rhs]
-
-    if ast.is_callable:
+    if ast.is_binary_op or ast.is_callable:
         args = []
         for arg in ast.args:
             term, count = _extract_classical_instructions(arg, mem, instructions, count)
             args.append(term)
 
-    label = f"%{count}"
-    instructions.append(Assign(label, Call(ast.head, *args)))
-    count += 1
+        label = f"%{count}"
+        instructions.append(Assign(label, Call(ast.head, *args)))
+        count += 1
 
-    term = Load(label)
-    mem[ast] = term
+        term = Load(label)
+        mem[ast] = term
 
-    return term, count
+        return term, count
+    
+    raise NotImplementedError
