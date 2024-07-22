@@ -105,5 +105,5 @@ def _extract_classical_instructions(
         mem[ast] = term
 
         return term, count
-    
+
     raise NotImplementedError
