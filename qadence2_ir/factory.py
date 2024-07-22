@@ -5,10 +5,10 @@ from __future__ import annotations
 
 from typing import Callable
 
+from .factory_tools import extract_inputs, extract_instructions
 from .irast import InputType
 from .irbuilder import AbstractIRBuilder
 from .types import Model
-from .factory_tools import extract_inputs, extract_instructions
 
 
 def irc_factory(builder: AbstractIRBuilder) -> Callable[[InputType], Model]:  # type: ignore

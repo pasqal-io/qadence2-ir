@@ -6,7 +6,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Generic
 
-from .irast import InputType, Attributes, AST
+from .irast import AST, Attributes, InputType
 from .types import AllocQubits
 
 

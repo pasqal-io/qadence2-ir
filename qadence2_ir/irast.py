@@ -3,11 +3,10 @@
 
 from __future__ import annotations
 
-from typing import Any, TypeVar
 from enum import Flag, auto
+from typing import Any, TypeVar
 
 from .types import Support
-
 
 InputType = TypeVar("InputType")
 Arguments = tuple[Any, ...]
@@ -68,9 +67,7 @@ class AST:
         **attributes: Any,
     ) -> AST:
         support = Support(target=target, control=control)
-        return cls.__construct__(
-            cls.Tag.QuantumOperator, name, support, *args, **attributes
-        )
+        return cls.__construct__(cls.Tag.QuantumOperator, name, support, *args, **attributes)
 
     @classmethod
     def sequence(cls, *args: Any) -> AST:

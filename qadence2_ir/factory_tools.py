@@ -7,7 +7,7 @@ from __future__ import annotations
 from typing import Any
 
 from .irast import AST
-from .types import Alloc, Assign, QuInstruct, Load, Call
+from .types import Alloc, Assign, Call, Load, QuInstruct
 
 
 def extract_inputs(ast: AST) -> dict[str, Alloc]:
@@ -64,12 +64,13 @@ def _extract_quantum_instructions(
     count: int = 0,
 ) -> tuple[Any, int]:
     if ast.is_quantum_op:
+        support = ast.args[0]
         args = []
-        for arg in ast.args:
+        for arg in ast.args[1:]:
             term, count = _extract_classical_instructions(arg, mem, instructions, count)
             if term:
                 args.append(term)
-        instructions.append(QuInstruct(ast.head, *args, **ast.attrs))
+        instructions.append(QuInstruct(ast.head, support, *args, **ast.attrs))
 
     return None, count
 
@@ -90,14 +91,10 @@ def _extract_classical_instructions(
         return Load(ast.head), count
 
     if ast.is_binary_op:
-        lhs, count = _extract_classical_instructions(
-            ast.args[0], mem, instructions, count
-        )
-        rhs, count = _extract_classical_instructions(
-            ast.args[1], mem, instructions, count
-        )
+        lhs, count = _extract_classical_instructions(ast.args[0], mem, instructions, count)
+        rhs, count = _extract_classical_instructions(ast.args[1], mem, instructions, count)
 
-        args = (lhs, rhs)
+        args = [lhs, rhs]
 
     if ast.is_callable:
         args = []
