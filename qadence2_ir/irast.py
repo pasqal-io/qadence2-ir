@@ -46,8 +46,8 @@ class AST:
         return cls.__construct__(cls.Tag.Numeric, "", value)
 
     @classmethod
-    def input_variable(cls, name: str, **attributes: Any) -> AST:
-        return cls.__construct__(cls.Tag.InputVariable, name, **attributes)
+    def input_variable(cls, name: str, size: int, trainable: bool, **attributes: Any) -> AST:
+        return cls.__construct__(cls.Tag.InputVariable, name, size, trainable, **attributes)
 
     @classmethod
     def binary_op(cls, op: str, lhs: AST, rhs: AST) -> AST:
@@ -76,24 +76,24 @@ class AST:
     # Prdeicates
     @property
     def is_numeric(self) -> bool:
-        return self == AST.Tag.Numeric
+        return self.tag == AST.Tag.Numeric
 
     @property
     def is_input_variable(self) -> bool:
-        return self == AST.Tag.InputVariable
+        return self.tag == AST.Tag.InputVariable
 
     @property
     def is_binary_op(self) -> bool:
-        return self == AST.Tag.BinaryOperation
+        return self.tag == AST.Tag.BinaryOperation
 
     @property
     def is_callable(self) -> bool:
-        return self == AST.Tag.Call
+        return self.tag == AST.Tag.Call
 
     @property
     def is_quantum_op(self) -> bool:
-        return self == AST.Tag.QuantumOperator
+        return self.tag == AST.Tag.QuantumOperator
 
     @property
     def is_sequence(self) -> bool:
-        return self == AST.Tag.Sequence
+        return self.tag == AST.Tag.Sequence
