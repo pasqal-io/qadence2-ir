@@ -47,7 +47,7 @@ def to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
 
 
 def build_instructions(ast: AST) -> list[QuInstruct | Assign]:
-    instructions, _, _ = reduce(lambda acc, x: to_instruct(x, *acc), flatten_ast(ast), ([], {}, 0))
+    instructions, _, _ = reduce(lambda acc, x: to_instruct(x, *acc), flatten_ast(ast), ([], {}, 0))  # type: ignore
     return instructions
 
 
@@ -56,11 +56,11 @@ def to_instruct(
 ) -> tuple[list[QuInstruct | Assign], dict[AST, Load], int]:
     if ast in mem or ast.is_numeric or ast.is_sequence:
         return instructions, mem, count
-    
+
     if ast.is_input_variable:
         mem[ast] = Load(ast.head)
         return instructions, mem, count
-    
+
     args = []
     for arg in ast.args:
         if isinstance(arg, AST):

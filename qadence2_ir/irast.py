@@ -107,7 +107,7 @@ class AST:
     def __hash__(self) -> int:
         if self.is_commutative_binary_op:
             return hash((self.tag, self.head, frozenset(self.args)))
-        
+
         return hash((self.tag, self.head, self.args))
 
     def __eq__(self, other: object) -> bool:
@@ -124,8 +124,4 @@ class AST:
                 and self.attrs == other.attrs
             )
 
-        return (
-                self.head == other.head
-                and self.args == other.args
-                and self.attrs == other.attrs
-            )
+        return self.head == other.head and self.args == other.args and self.attrs == other.attrs
