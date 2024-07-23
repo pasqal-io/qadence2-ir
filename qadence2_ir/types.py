@@ -85,6 +85,9 @@ class Support:
     @classmethod
     def target_all(cls) -> Support:
         return Support(target=())
+    
+    def __hash__(self) -> int:
+        return hash((*self.target, *self.control))
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Support):
