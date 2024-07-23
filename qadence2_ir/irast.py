@@ -20,6 +20,7 @@ class AST:
         QuantumOperator = auto()
         Call = auto()
         BinaryOperation = auto()
+        CommutativeBinaryOperation = auto()
         InputVariable = auto()
         Numeric = auto()
 
@@ -27,9 +28,6 @@ class AST:
     head: str
     args: tuple[Any, ...]
     attrs: dict[Any, Any]
-
-    def __hash__(self) -> int:
-        return hash((self.tag, self.head, self.args))
 
     # Constructors
     @classmethod
@@ -52,6 +50,10 @@ class AST:
     @classmethod
     def binary_op(cls, op: str, lhs: AST, rhs: AST) -> AST:
         return cls.__construct__(cls.Tag.BinaryOperation, op, lhs, rhs)
+
+    @classmethod
+    def binary_op_comm(cls, op: str, lhs: AST, rhs: AST) -> AST:
+        return cls.__construct__(cls.Tag.CommutativeBinaryOperation, op, lhs, rhs)
 
     @classmethod
     def callable(cls, name: str, *args: Any) -> AST:
@@ -87,6 +89,10 @@ class AST:
         return self.tag == AST.Tag.BinaryOperation
 
     @property
+    def is_commutative_binary_op(self) -> bool:
+        return self.tag == AST.Tag.CommutativeBinaryOperation
+
+    @property
     def is_callable(self) -> bool:
         return self.tag == AST.Tag.Call
 
@@ -97,3 +103,29 @@ class AST:
     @property
     def is_sequence(self) -> bool:
         return self.tag == AST.Tag.Sequence
+
+    def __hash__(self) -> int:
+        if self.is_commutative_binary_op:
+            return hash((self.tag, self.head, frozenset(self.args)))
+        
+        return hash((self.tag, self.head, self.args))
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, AST):
+            return NotImplemented
+
+        if self.tag != other.tag:
+            return False
+
+        if self.is_commutative_binary_op:
+            return (
+                self.head == other.head
+                and set(self.args) == set(other.args)
+                and self.attrs == other.attrs
+            )
+
+        return (
+                self.head == other.head
+                and self.args == other.args
+                and self.attrs == other.attrs
+            )
