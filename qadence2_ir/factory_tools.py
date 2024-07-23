@@ -5,10 +5,10 @@
 from __future__ import annotations
 
 from functools import reduce
-from typing import Any, Callable, Iterable
+from typing import Callable, Iterable
 
 from .irast import AST
-from .types import Alloc, Assign, Call, Load, QuInstruct
+from .types import Alloc, Assign, Call, Load, QuInstruct, Support
 
 
 def filter_ast(predicate: Callable[[AST], bool], ast: AST) -> Iterable[AST]:
@@ -32,10 +32,10 @@ def flatten_ast(ast: AST) -> Iterable[AST]:
 
 
 def extract_inputs(ast: AST) -> dict[str, Alloc]:
-    return reduce(variable_to_alloc, filter_ast(lambda x: x.is_input_variable, ast), {})
+    return reduce(to_alloc, filter_ast(lambda x: x.is_input_variable, ast), {})
 
 
-def variable_to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
+def to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
     if ast.is_input_variable and ast.head not in inputs:
         name = ast.head
         size = ast.args[0]
@@ -47,76 +47,38 @@ def variable_to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
 
 
 def build_instructions(ast: AST) -> list[QuInstruct | Assign]:
-    instructions: list[QuInstruct | Assign] = []
-    _build_instructions_core(ast, {}, instructions)
+    instructions, _, _ = reduce(lambda acc, x: to_instruct(x, *acc), flatten_ast(ast), ([], {}, 0))
     return instructions
 
 
-def _build_instructions_core(
-    ast: AST,
-    mem: dict[AST, Load],
-    instructions: list[QuInstruct | Assign],
-    count: int = 0,
-) -> tuple[Load | None, int]:
-    if ast.is_sequence:
-        for arg in ast.args:
-            term, count = _build_instructions_core(arg, mem, instructions, count)
-
-    elif ast.is_quantum_op:
-        term, count = _build_quantum_instructions(ast, mem, instructions, count)
-
-    else:
-        term, count = _build_classical_instructions(ast, mem, instructions, count)
-
-    return term, count
-
-
-def _build_quantum_instructions(
-    ast: AST,
-    mem: dict[AST, Load],
-    instructions: list[QuInstruct | Assign],
-    count: int = 0,
-) -> tuple[Any, int]:
-    if ast.is_quantum_op:
-        support = ast.args[0]
-        args = []
-        for arg in ast.args[1:]:
-            term, count = _build_classical_instructions(arg, mem, instructions, count)
-            if term:
-                args.append(term)
-        instructions.append(QuInstruct(ast.head, support, *args, **ast.attrs))
-
-    return None, count
-
-
-def _build_classical_instructions(
-    ast: AST,
-    mem: dict[AST, Load],
-    instructions: list[QuInstruct | Assign],
-    count: int = 0,
-) -> tuple[Load | None, int]:
-    if ast in mem:
-        return mem[ast], count
-
-    if ast.is_numeric:
-        return ast.args[0], count
-
+def to_instruct(
+    ast: AST, instructions: list[QuInstruct | Assign], mem: dict[AST, Load], count: int
+) -> tuple[list[QuInstruct | Assign], dict[AST, Load], int]:
+    if ast in mem or ast.is_numeric or ast.is_sequence:
+        return instructions, mem, count
+    
     if ast.is_input_variable:
-        return Load(ast.head), count
+        mem[ast] = Load(ast.head)
+        return instructions, mem, count
+    
+    args = []
+    for arg in ast.args:
+        if isinstance(arg, AST):
+            if arg.is_numeric:
+                args.append(arg.args[0])
+            else:
+                args.append(mem[arg])
 
-    if ast.is_binary_op or ast.is_callable:
-        args = []
-        for arg in ast.args:
-            term, count = _build_classical_instructions(arg, mem, instructions, count)
-            args.append(term)
+        elif isinstance(arg, Support):
+            args.append(arg)
 
+    if ast.is_binary_op or ast.is_commutative_binary_op or ast.is_callable:
         label = f"%{count}"
         instructions.append(Assign(label, Call(ast.head, *args)))
+        mem[ast] = Load(label)
         count += 1
 
-        term = Load(label)
-        mem[ast] = term
+    else:
+        instructions.append(QuInstruct(ast.head, *args, **ast.attrs))
 
-        return term, count
-
-    raise NotImplementedError
+    return instructions, mem, count
