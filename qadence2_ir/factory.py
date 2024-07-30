@@ -11,7 +11,7 @@ from .irbuilder import AbstractIRBuilder
 from .types import Model
 
 
-def irc_factory(builder: AbstractIRBuilder) -> Callable[[InputType], Model]:
+def ir_compiler_factory(builder: AbstractIRBuilder) -> Callable[[InputType], Model]:
     def ir_compiler(input_obj: InputType) -> Model:
         register = builder.set_register(input_obj)
         directives = builder.set_directives(input_obj)
