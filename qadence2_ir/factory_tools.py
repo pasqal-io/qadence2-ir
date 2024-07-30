@@ -54,7 +54,7 @@ def build_instructions(ast: AST) -> list[QuInstruct | Assign]:
 def to_instruct(
     ast: AST, instructions: list[QuInstruct | Assign], mem: dict[AST, Load], count: int
 ) -> tuple[list[QuInstruct | Assign], dict[AST, Load], int]:
-    if ast in mem or ast.is_numeric or ast.is_sequence:
+    if ast in mem or ast.is_numeric or ast.is_support or ast.is_sequence:
         return instructions, mem, count
 
     if ast.is_input_variable:
@@ -66,11 +66,10 @@ def to_instruct(
         if isinstance(arg, AST):
             if arg.is_numeric:
                 args.append(arg.args[0])
+            elif arg.is_support:
+                args.append(Support(target=arg.args[0], control=arg.args[1]))
             else:
                 args.append(mem[arg])
-
-        elif isinstance(arg, Support):
-            args.append(arg)
 
     if ast.is_binary_op or ast.is_commutative_binary_op or ast.is_callable:
         label = f"%{count}"
