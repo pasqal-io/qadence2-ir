@@ -24,6 +24,14 @@ class Alloc:
             params += f", attrs={self.attrs}"
         return f"{self.__class__.__name__}({params})"
 
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, Alloc):
+            return NotImplemented
+
+        lhs = (self.size, self.is_trainable, self.attrs)
+        rhs = (value.size, value.is_trainable, value.attrs)
+        return lhs == rhs
+
 
 class Assign:
     """Push a variable to the environment and assign a value to it."""
@@ -35,6 +43,14 @@ class Assign:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self.variable)}, {self.value})"
 
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, Assign):
+            return NotImplemented
+
+        lhs = (self.variable, self.value)
+        rhs = (value.variable, value.value)
+        return lhs == rhs
+
 
 class Load:
     """To recover the value of a given variable."""
@@ -44,6 +60,12 @@ class Load:
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self.variable)})"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, Load):
+            return NotImplemented
+
+        return self.variable == value.variable
 
 
 class Call:
@@ -58,6 +80,14 @@ class Call:
     def __repr__(self) -> str:
         args = ", ".join(map(repr, self.args))
         return f"{self.__class__.__name__}({repr(self.identifier)}, {args})"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, Call):
+            return NotImplemented
+
+        lhs = (self.identifier, self.args)
+        rhs = (value.identifier, value.args)
+        return lhs == rhs
 
 
 class Support:
@@ -86,15 +116,6 @@ class Support:
     def target_all(cls) -> Support:
         return Support(target=())
 
-    def __hash__(self) -> int:
-        return hash((*self.target, *self.control))
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Support):
-            return NotImplemented
-
-        return self.target == other.target and self.control == other.control
-
     def __repr__(self) -> str:
         if not self.target:
             return f"{self.__class__.__name__}.target_all()"
@@ -104,6 +125,14 @@ class Support:
             subspace += f", control={self.control}"
 
         return f"{self.__class__.__name__}({subspace})"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, Support):
+            return NotImplemented
+
+        lhs = (self.target, self.control)
+        rhs = (value.target, value.control)
+        return lhs == rhs
 
 
 class QuInstruct:
@@ -130,6 +159,14 @@ class QuInstruct:
         if self.attrs:
             params += f", attrs={self.attrs}"
         return f"{self.__class__.__name__}({params})"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, QuInstruct):
+            return NotImplemented
+
+        lhs = (self.name, self.support, self.args, self.attrs)
+        rhs = (value.name, value.support, value.args, value.attrs)
+        return lhs == rhs
 
 
 class AllocQubits:
@@ -170,6 +207,20 @@ class AllocQubits:
     def __repr__(self) -> str:
         items = ", ".join(f"{k}={v}" for k, v in self.__dict__.items())
         return f"{self.__class__.__name__}({items})"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, AllocQubits):
+            return NotImplemented
+
+        lhs = (self.num_qubits, self.qubit_positions, self.grid_type, self.grid_scale, self.options)
+        rhs = (
+            value.num_qubits,
+            value.qubit_positions,
+            value.grid_type,
+            value.grid_scale,
+            value.options,
+        )
+        return lhs == rhs
 
 
 class Model:
@@ -225,3 +276,11 @@ class Model:
                 acc += (f"\n{items},\n{indent}" if items else "") + "],"
 
         return acc + "\n)"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, Model):
+            return NotImplemented
+
+        lhs = (self.register, self.inputs, self.instructions, self.directives, self.settings)
+        rhs = (value.register, value.inputs, value.instructions, value.directives, value.settings)
+        return lhs == rhs
