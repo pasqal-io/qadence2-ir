@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import unittest
 
+from qadence2_ir.factory_tools import build_instructions, extract_inputs, filter_ast, flatten_ast
 from qadence2_ir.irast import AST
-from qadence2_ir.factory_tools import build_instructions, extract_inputs, flatten_ast, filter_ast
 from qadence2_ir.types import Alloc, Assign, Call, Load, QuInstruct, Support
 
 

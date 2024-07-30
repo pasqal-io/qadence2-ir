@@ -57,7 +57,7 @@ class AST:
     @classmethod
     def callable(cls, name: str, *args: Any) -> AST:
         return cls.__construct__(cls.Tag.Call, name, *args)
-    
+
     @classmethod
     def support(cls, target: tuple[int, ...], control: tuple[int, ...]) -> AST:
         return cls.__construct__(cls.Tag.Support, "", target, control)
@@ -98,7 +98,7 @@ class AST:
     @property
     def is_callable(self) -> bool:
         return self.tag == AST.Tag.Call
-    
+
     @property
     def is_support(self) -> bool:
         return self.tag == AST.Tag.Support
