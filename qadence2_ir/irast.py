@@ -1,6 +1,3 @@
-# TODO:
-# - [ ] docstrings
-
 from __future__ import annotations
 
 from enum import Flag, auto
@@ -12,6 +9,9 @@ Attributes = dict[str, Any]
 
 
 class AST:
+    """A class to keep a clean version of the instruction sequence to be converted
+    into a list of Model instructions.
+    """
 
     class Tag(Flag):
         Sequence = auto()
