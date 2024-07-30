@@ -51,13 +51,13 @@ class Call:
     Indicates the call of classical functions only.
     """
 
-    def __init__(self, function_name: str, *args: Any) -> None:
-        self.call = function_name
+    def __init__(self, identifier: str, *args: Any) -> None:
+        self.identifier = identifier
         self.args = args
 
     def __repr__(self) -> str:
         args = ", ".join(map(repr, self.args))
-        return f"{self.__class__.__name__}({repr(self.call)}, {args})"
+        return f"{self.__class__.__name__}({repr(self.identifier)}, {args})"
 
 
 class Support:
