@@ -6,8 +6,6 @@ from __future__ import annotations
 from enum import Flag, auto
 from typing import Any, TypeVar
 
-from .types import Support
-
 InputType = TypeVar("InputType")
 Arguments = tuple[Any, ...]
 Attributes = dict[str, Any]
@@ -18,6 +16,7 @@ class AST:
     class Tag(Flag):
         Sequence = auto()
         QuantumOperator = auto()
+        Support = auto()
         Call = auto()
         BinaryOperation = auto()
         CommutativeBinaryOperation = auto()
@@ -58,6 +57,10 @@ class AST:
     @classmethod
     def callable(cls, name: str, *args: Any) -> AST:
         return cls.__construct__(cls.Tag.Call, name, *args)
+    
+    @classmethod
+    def support(cls, target: tuple[int, ...], control: tuple[int, ...]) -> AST:
+        return cls.__construct__(cls.Tag.Support, "", target, control)
 
     @classmethod
     def quantum_op(
@@ -68,7 +71,7 @@ class AST:
         *args: Any,
         **attributes: Any,
     ) -> AST:
-        support = Support(target=target, control=control)
+        support = cls.support(target, control)
         return cls.__construct__(cls.Tag.QuantumOperator, name, support, *args, **attributes)
 
     @classmethod
@@ -95,6 +98,10 @@ class AST:
     @property
     def is_callable(self) -> bool:
         return self.tag == AST.Tag.Call
+    
+    @property
+    def is_support(self) -> bool:
+        return self.tag == AST.Tag.Support
 
     @property
     def is_quantum_op(self) -> bool:
@@ -125,3 +132,6 @@ class AST:
             )
 
         return self.head == other.head and self.args == other.args and self.attrs == other.attrs
+
+    def __repr__(self) -> str:
+        return f"{self.tag}({self.head}, {self.args}, {self.attrs})"
