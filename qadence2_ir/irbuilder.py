@@ -7,7 +7,7 @@ from .irast import AST, Attributes, InputType
 from .types import AllocQubits
 
 
-class AbstractIRBuilder(ABC, Generic[InputType]):
+class IRBuilder(ABC, Generic[InputType]):
     """A base class to help create new input forms for Qadence2-IR.
 
     Implementing this class allows the function `ir_compiler_factory` to generate
