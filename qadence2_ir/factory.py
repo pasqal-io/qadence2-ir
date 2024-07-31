@@ -4,7 +4,7 @@ from typing import Callable
 
 from .factory_tools import build_instructions, extract_inputs
 from .irast import InputType
-from .irbuilder import AbstractIRBuilder as IRBuilder
+from .irbuilder import IRBuilder
 from .types import Model
 
 
@@ -21,9 +21,9 @@ def ir_compiler_factory(builder: IRBuilder[InputType]) -> Callable[[InputType], 
         settings = builder.settings(input_obj)
 
         ast = builder.parse_sequence(input_obj)
-        inputs = extract_inputs(ast)
+        input_variables = extract_inputs(ast)
         instructions = build_instructions(ast)
 
-        return Model(register, inputs, instructions, directives, settings)
+        return Model(register, input_variables, instructions, directives, settings)
 
     return ir_compiler
