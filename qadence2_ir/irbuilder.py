@@ -17,7 +17,9 @@ class IRBuilder(ABC, Generic[InputType]):
     @staticmethod
     @abstractmethod
     def set_register(input_obj: InputType) -> AllocQubits:
-        """Used by the factory to define the qubits register from the input."""
+        """Used by the factory to define/extract/infere the qubits register primarily from the
+        `input_obj`.
+        """
 
     @staticmethod
     @abstractmethod

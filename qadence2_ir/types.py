@@ -8,7 +8,7 @@ class Alloc:
     Reserve one slot for a scaler parameter in the environment and n-slots for
     an array. The type of the parameter is defined by the backend.
 
-    Inputs:
+    Arguments:
         size: Space occupied by the parameter.
         trainable: Flag if the parameter can change during a training loop.
     """
@@ -98,7 +98,7 @@ class Support:
 
     Both target and control lists must be ordered!
 
-    Inputs:
+    Arguments:
        target = Index or indices where the operation is applied.
        control = Index or indices to which the operation is conditioned to.
     """
@@ -139,7 +139,7 @@ class QuInstruct:
     """
     An abstract representation of a QPU instruction.
 
-    Inputs:
+    Arguments:
         name: The instruction name compatible with the standard instruction set.
         support: The index of qubits to which the instruction is applied to.
         args: Arguments of the instruction such as angle, duration, amplitude etc.
@@ -173,7 +173,7 @@ class AllocQubits:
     """
     Describes the register configuration in a neutral-atoms device.
 
-    Inputs:
+    Arguments:
         num_qubits: Number of atoms to be allocated.
         qubit_positions: A list of discrete coordinates for 2D grid with (0,0)
             position at center of the grid. A list of indices in a linear register.
@@ -229,7 +229,7 @@ class Model:
     a quantum device. The structure is mainly focused in neutral atoms devices
     but its agnostic nature may make it suitable for any quantum device.
 
-    Inputs:
+    Arguments:
         register: Describe the atomic arrangement of the neutral atom register.
         instructions:  A list of abstract instructions with their arguments with
             which a backend can execute a sequence.
@@ -244,7 +244,7 @@ class Model:
     def __init__(
         self,
         register: AllocQubits,
-        inputs: dict[str, Alloc],
+        Arguments: dict[str, Alloc],
         instructions: list[QuInstruct | Assign],
         directives: dict[str, Any] | None = None,
         settings: dict[str, Any] | None = None,
