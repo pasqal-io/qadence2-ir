@@ -51,7 +51,7 @@ def flatten_ast(ast: AST) -> Iterable[AST]:
 def extract_inputs(ast: AST) -> dict[str, Alloc]:
     """Convert all the input variables in the AST into allocation instructions."""
 
-    return reduce(to_alloc, filter_ast(lambda x: x.is_input_variable, ast), {})
+    return reduce(to_alloc, filter_ast(lambda x: x.is_input_variable, ast), dict())
 
 
 def to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
@@ -74,7 +74,9 @@ def build_instructions(ast: AST) -> list[QuInstruct | Assign]:
     instructions.
     """
 
-    instructions, _, _ = reduce(lambda acc, x: to_instruct(x, *acc), flatten_ast(ast), ([], {}, 0))  # type: ignore
+    instructions, _, _ = reduce(  # type: ignore
+        lambda acc, x: to_instruct(x, *acc), flatten_ast(ast), ([], dict(), 0)  # type: ignore
+    )
     return instructions
 
 
