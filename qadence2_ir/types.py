@@ -244,7 +244,7 @@ class Model:
     def __init__(
         self,
         register: AllocQubits,
-        Arguments: dict[str, Alloc],
+        inputs: dict[str, Alloc],
         instructions: list[QuInstruct | Assign],
         directives: dict[str, Any] | None = None,
         settings: dict[str, Any] | None = None,

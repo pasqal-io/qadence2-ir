@@ -18,7 +18,7 @@ def ir_compiler_factory(builder: IRBuilder[InputType]) -> Callable[[InputType], 
     Arguments:
         - builder: A concrete implementation of the generic class `IRBuilder` for a particular
             `InputType`.
-    
+
     Return:
         A function that compiles an `InputType` object to the Qadence-IR (`Model`).
     """
