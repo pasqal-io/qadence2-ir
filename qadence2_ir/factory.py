@@ -9,7 +9,7 @@ from .types import Model
 
 
 def ir_compiler_factory(builder: IRBuilder[InputType]) -> Callable[[InputType], Model]:
-    """Uses the IRBuilder[InputType] to create an IR compiler function that converts
+    """Use an IRBuilder[InputType] to create an IR compiler function that converts
     an input of type `InputType` and returns a Model.
 
     By convention, the IR compiler should be named as `compile_to_model`.
