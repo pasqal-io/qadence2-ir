@@ -16,7 +16,7 @@ class TestFactoryTools(unittest.TestCase):
     def test_flatten_ast(self) -> None:
         x = AST.input_variable("x", 1, False)
         three = AST.numeric(3)
-        div = AST.binary_op("/", x, three)
+        div = AST.div(x, three)
         ast = AST.callable("fn", div, x)
 
         res = list(flatten_ast(ast))
@@ -25,7 +25,7 @@ class TestFactoryTools(unittest.TestCase):
     def test_filter_ast(self) -> None:
         x = AST.input_variable("x", 1, False)
         three = AST.numeric(3)
-        div = AST.binary_op("/", x, three)
+        div = AST.div(x, three)
         ast = AST.callable("fn", div, x)
 
         res = list(filter_ast(lambda x: x.is_input_variable, ast))
@@ -34,7 +34,7 @@ class TestFactoryTools(unittest.TestCase):
     def test_extract_inputs(self) -> None:
         x = AST.input_variable("x", 1, False)
         three = AST.numeric(3)
-        div = AST.binary_op("/", x, three)
+        div = AST.div(x, three)
         ast = AST.callable("fn", div, x)
 
         res = extract_inputs_variables(ast)
@@ -43,13 +43,13 @@ class TestFactoryTools(unittest.TestCase):
     def test_build_instructions(self) -> None:
         x = AST.input_variable("x", 1, False)
         three = AST.numeric(3.0)
-        div = AST.binary_op("/", x, three)
+        div = AST.div(x, three)
         fn = AST.callable("fn", div, x)
         ast = AST.quantum_op("rx", (0,), (1,), fn)
 
         res = build_instructions(ast)
         target = [
-            Assign("%0", Call("/", Load("x"), 3.0)),
+            Assign("%0", Call("div", Load("x"), 3.0)),
             Assign("%1", Call("fn", Load("%0"), Load("x"))),
             QuInstruct("rx", Support(target=(0,), control=(1,)), Load("%1")),
         ]
