@@ -217,8 +217,8 @@ class AST:
         """Create an AST-arithmetic power.
 
         Arguments:
-            - lhs: Left-hand side operand.
-            - rhs: Right-hand side operand.
+            - base: Base operand.
+            - power: Power operand.
         """
 
         return cls.callable("pow", base, power)
