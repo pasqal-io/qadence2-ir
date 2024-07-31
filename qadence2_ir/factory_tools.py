@@ -167,7 +167,7 @@ def to_instruct(
             else:
                 args.append(memoise[arg])
 
-    if ast.is_binary_op or ast.is_commutative_binary_op or ast.is_callable:
+    if ast.is_callable:
         label = f"%{single_assign_index}"
         instructions_list.append(Assign(label, Call(ast.head, *args)))
         memoise[ast] = Load(label)

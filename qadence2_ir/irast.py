@@ -17,14 +17,16 @@ class AST:
     Constructors:
         - AST.numeric(value): For numerical values.
         - AST.input_variable(name, size, trainable): For literal variables.
-        - AST.binary_op(op, lhs, rhs): For binary operation where the order of the operation
-            matters, like power, division, and subtraction,
-        - AST.binary_op_comm(op, lhs, rhs): For binary operation where the operands commute, like
-            multiplication and addition.
         - AST.callable(fn_name, *args): For classical functions.
         - AST.support(target, control): For qubit indices.
         - AST.quantum_op(name, support, *args): For quantum operators with and without parameters.
         - AST.sequence(*q_ops): For sequences of quantum operations.
+        - AST.add(lhs, rhs): For addition, lhs + rhs.
+        - AST.sub(lhs, rhs): For subtraction, lhs - rhs.
+        - AST.mul(lhs, rhs): For multiplication, lhs * rhs.
+        - AST.div(lhs, rhs): For division, lhs / rhs.
+        - AST.rem(lhs, rhs): For remainder, lhs % rhs.
+        - AST.pow(base, power): For power, base ** power.
     """
 
     class Tag(Flag):
@@ -32,8 +34,6 @@ class AST:
         QuantumOperator = auto()
         Support = auto()
         Call = auto()
-        BinaryOperation = auto()
-        CommutativeBinaryOperation = auto()
         InputVariable = auto()
         Numeric = auto()
 
@@ -99,36 +99,6 @@ class AST:
         return cls.__construct__(cls.Tag.InputVariable, name, size, trainable, **attributes)
 
     @classmethod
-    def binary_op(cls, op: str, lhs: AST, rhs: AST) -> AST:
-        """Create an AST-binary operation.
-
-        This constructor is meant to be used with non-commutative operations.
-            lhs op rhs ≠ rhs op lhs
-
-        Arguments:
-            - op: Operator.
-            - lhs: Left-hand side term
-            - rhs: Right-hand side term
-        """
-
-        return cls.__construct__(cls.Tag.BinaryOperation, op, lhs, rhs)
-
-    @classmethod
-    def binary_op_comm(cls, op: str, lhs: AST, rhs: AST) -> AST:
-        """Create an AST-binary operation (commutative).
-
-        This constructor is meant to be used with commutative operations.
-            lhs op rhs == rhs op lhs
-
-        Arguments:
-            - op: Operator.
-            - lhs: Left-hand side term
-            - rhs: Right-hand side term
-        """
-
-        return cls.__construct__(cls.Tag.CommutativeBinaryOperation, op, lhs, rhs)
-
-    @classmethod
     def callable(cls, name: str, *args: Any) -> AST:
         """Create an AST-function object.
 
@@ -180,11 +150,78 @@ class AST:
         """Create an AST-sequence of quantum operators objects.
 
         Arguments:
-            - quantum_operators: Sequence of quantum operators to be applied by the backend it the
+            - quantum_operators: Sequence of quantum operators to be applied by the backend in the
                 given order.
         """
 
         return cls.__construct__(cls.Tag.Sequence, "", *quantum_operators)
+
+    # Arithmetic constructors
+    @classmethod
+    def add(cls, lhs: AST, rhs: AST) -> AST:
+        """Create an AST-arithmetic addition.
+
+        Arguments:
+            - lhs: Left-hand side operand.
+            - rhs: Right-hand side operand.
+        """
+
+        return cls.callable("add", lhs, rhs)
+
+    @classmethod
+    def sub(cls, lhs: AST, rhs: AST) -> AST:
+        """Create an AST-arithmetic subtraction.
+
+        Arguments:
+            - lhs: Left-hand side operand.
+            - rhs: Right-hand side operand.
+        """
+
+        return cls.callable("sub", lhs, rhs)
+
+    @classmethod
+    def mul(cls, lhs: AST, rhs: AST) -> AST:
+        """Create an AST-arithmetic multiplication.
+
+        Arguments:
+            - lhs: Left-hand side operand.
+            - rhs: Right-hand side operand.
+        """
+
+        return cls.callable("mul", lhs, rhs)
+
+    @classmethod
+    def div(cls, lhs: AST, rhs: AST) -> AST:
+        """Create an AST-arithmetic division.
+
+        Arguments:
+            - lhs: Left-hand side operand.
+            - rhs: Right-hand side operand.
+        """
+
+        return cls.callable("div", lhs, rhs)
+
+    @classmethod
+    def rem(cls, lhs: AST, rhs: AST) -> AST:
+        """Create an AST-arithmetic remainder.
+
+        Arguments:
+            - lhs: Left-hand side operand.
+            - rhs: Right-hand side operand.
+        """
+
+        return cls.callable("rem", lhs, rhs)
+
+    @classmethod
+    def pow(cls, base: AST, power: AST) -> AST:
+        """Create an AST-arithmetic power.
+
+        Arguments:
+            - lhs: Left-hand side operand.
+            - rhs: Right-hand side operand.
+        """
+
+        return cls.callable("pow", base, power)
 
     # Predicates
     @property
@@ -196,16 +233,32 @@ class AST:
         return self._tag == AST.Tag.InputVariable
 
     @property
-    def is_binary_op(self) -> bool:
-        return self._tag == AST.Tag.BinaryOperation
-
-    @property
-    def is_commutative_binary_op(self) -> bool:
-        return self._tag == AST.Tag.CommutativeBinaryOperation
-
-    @property
     def is_callable(self) -> bool:
         return self._tag == AST.Tag.Call
+
+    @property
+    def is_addition(self) -> bool:
+        return self._tag == AST.Tag.Call and self._head == "add"
+
+    @property
+    def is_subtraction(self) -> bool:
+        return self._tag == AST.Tag.Call and self._head == "sub"
+
+    @property
+    def is_multiplication(self) -> bool:
+        return self._tag == AST.Tag.Call and self._head == "mul"
+
+    @property
+    def is_division(self) -> bool:
+        return self._tag == AST.Tag.Call and self._head == "div"
+
+    @property
+    def is_remainder(self) -> bool:
+        return self._tag == AST.Tag.Call and self._head == "rem"
+
+    @property
+    def is_power(self) -> bool:
+        return self._tag == AST.Tag.Call and self._head == "pow"
 
     @property
     def is_support(self) -> bool:
@@ -220,7 +273,7 @@ class AST:
         return self._tag == AST.Tag.Sequence
 
     def __hash__(self) -> int:
-        if self.is_commutative_binary_op:
+        if self.is_addition or self.is_multiplication:
             return hash((self._tag, self._head, frozenset(self._args)))
 
         return hash((self._tag, self._head, self._args))
@@ -232,7 +285,7 @@ class AST:
         if self._tag != other._tag:
             return False
 
-        if self.is_commutative_binary_op:
+        if self.is_addition or self.is_multiplication:
             return (
                 self._head == other._head
                 and set(self._args) == set(other._args)
