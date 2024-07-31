@@ -17,8 +17,8 @@ class AST:
     Constructors:
         - AST.numeric(value): For numerical values.
         - AST.input_variable(name, size, trainable): For literal variables.
-        - AST.binary_op(op, lhs, rhs): For binary operation where the order of the operation matters,
-            like power, division, and subtraction,
+        - AST.binary_op(op, lhs, rhs): For binary operation where the order of the operation
+            matters, like power, division, and subtraction,
         - AST.binary_op_comm(op, lhs, rhs): For binary operation where the operands commute, like
             multiplication and addition.
         - AST.callable(fn_name, *args): For classical functions.
@@ -42,6 +42,22 @@ class AST:
     _args: tuple[Any, ...]
     _attrs: dict[Any, Any]
 
+    @property
+    def tag(self) -> Tag:
+        return self._tag
+
+    @property
+    def head(self) -> str:
+        return self._head
+
+    @property
+    def args(self) -> tuple[Any, ...]:
+        return self._args
+
+    @property
+    def attrs(self) -> dict[Any, Any]:
+        return self._attrs
+
     # Constructors
     @classmethod
     def __construct__(cls, tag: Tag, head: str, *args: Any, **attrs: Any) -> AST:
@@ -59,7 +75,7 @@ class AST:
     @classmethod
     def numeric(cls, value: complex | float) -> AST:
         """Create an AST-numeric object.
-        
+
         Arguments:
             - value: Numerical value to be converted in the Qadence-IR AST.
         """
@@ -69,12 +85,12 @@ class AST:
     @classmethod
     def input_variable(cls, name: str, size: int, trainable: bool, **attributes: Any) -> AST:
         """Create an AST-input variable.
-        
+
         Arguments:
             - name: Variable's name.
             - size: Number of slots to be reserved for the variable, 1 for scalar values and n>1 for
                 array variables.
-            - trainable: A boolean flag to indicate if the variable is intend to be optimised or 
+            - trainable: A boolean flag to indicate if the variable is intend to be optimised or
                 used as a constand during the run.
             - attributes: Extra flags, values or dictionaries that can provide more context to the
                 backends.
@@ -88,7 +104,7 @@ class AST:
 
         This constructor is meant to be used with non-commutative operations.
             lhs op rhs ≠ rhs op lhs
-        
+
         Arguments:
             - op: Operator.
             - lhs: Left-hand side term
@@ -103,7 +119,7 @@ class AST:
 
         This constructor is meant to be used with commutative operations.
             lhs op rhs == rhs op lhs
-        
+
         Arguments:
             - op: Operator.
             - lhs: Left-hand side term
@@ -115,7 +131,7 @@ class AST:
     @classmethod
     def callable(cls, name: str, *args: Any) -> AST:
         """Create an AST-function object.
-        
+
         Arguments:
             - name: Function name.
             - args: Arguments to be passed to the function.
@@ -127,7 +143,7 @@ class AST:
     def support(cls, target: tuple[int, ...], control: tuple[int, ...]) -> AST:
         """Create an AST-support object used to indicate to which qubits a quantum operation is
         applied.
-        
+
         Arguments:
             - target: A tuple of indices a quantum operator is acting on.
             - control: A tuple of indices a quantum operator uses as control qubits.
@@ -145,12 +161,12 @@ class AST:
         **attributes: Any,
     ) -> AST:
         """Create an AST-quantum operator.
-        
+
         Arguments:
             - name: Operator's name.
             - target: A tuple of indices a quantum operator is acting on.
             - control: A tuple of indices a quantum operator uses as control qubits.
-            - args: Arguments to be passed to parameteric quantum operators. Non-parametric 
+            - args: Arguments to be passed to parameteric quantum operators. Non-parametric
                 operators like Puali gates are treated as a parametric operator with no arguments.
             - attributes: Extra flags, values or dictionaries that can provide more context to the
                 backends.
@@ -162,7 +178,7 @@ class AST:
     @classmethod
     def sequence(cls, *quantum_operators: Any) -> AST:
         """Create an AST-sequence of quantum operators objects.
-        
+
         Arguments:
             - quantum_operators: Sequence of quantum operators to be applied by the backend it the
                 given order.
@@ -223,7 +239,9 @@ class AST:
                 and self._attrs == other._attrs
             )
 
-        return self._head == other._head and self._args == other._args and self._attrs == other._attrs
+        return (
+            self._head == other._head and self._args == other._args and self._attrs == other._attrs
+        )
 
     def __repr__(self) -> str:
         return f"{self._tag}({self._head}, {self._args}, {self._attrs})"

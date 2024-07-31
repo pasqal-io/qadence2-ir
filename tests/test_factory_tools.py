@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import unittest
 
-from qadence2_ir.factory_tools import build_instructions, extract_inputs, filter_ast, flatten_ast
+from qadence2_ir.factory_tools import (
+    build_instructions,
+    extract_inputs_variables,
+    filter_ast,
+    flatten_ast,
+)
 from qadence2_ir.irast import AST
 from qadence2_ir.types import Alloc, Assign, Call, Load, QuInstruct, Support
 
@@ -32,7 +37,7 @@ class TestFactoryTools(unittest.TestCase):
         div = AST.binary_op("/", x, three)
         ast = AST.callable("fn", div, x)
 
-        res = extract_inputs(ast)
+        res = extract_inputs_variables(ast)
         self.assertEqual(res, {"x": Alloc(1, False)})
 
     def test_build_instructions(self) -> None:

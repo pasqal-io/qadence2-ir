@@ -68,7 +68,7 @@ def flatten_ast(ast: AST) -> Iterable[AST]:
 
 def extract_inputs_variables(ast: AST) -> dict[str, Alloc]:
     """Convert all the input variables in the AST into allocation instructions.
-    
+
     Arguments:
         - ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
