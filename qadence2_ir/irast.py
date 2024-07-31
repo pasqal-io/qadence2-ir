@@ -282,19 +282,13 @@ class AST:
         if not isinstance(other, AST):
             return NotImplemented
 
-        if self._tag != other._tag:
+        if self._tag != other._tag or self._head != other._head:
             return False
 
         if self.is_addition or self.is_multiplication:
-            return (
-                self._head == other._head
-                and set(self._args) == set(other._args)
-                and self._attrs == other._attrs
-            )
+            return set(self._args) == set(other._args) and self._attrs == other._attrs
 
-        return (
-            self._head == other._head and self._args == other._args and self._attrs == other._attrs
-        )
+        return self._args == other._args and self._attrs == other._attrs
 
     def __repr__(self) -> str:
         return f"{self._tag}({self._head}, {self._args}, {self._attrs})"
