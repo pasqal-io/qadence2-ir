@@ -15,18 +15,18 @@ class AST:
     The initilization of this class must be done using the specific constructors.
 
     Constructors:
-        - AST.numeric(value): For numerical values.
-        - AST.input_variable(name, size, trainable): For literal variables.
-        - AST.callable(fn_name, *args): For classical functions.
-        - AST.support(target, control): For qubit indices.
-        - AST.quantum_op(name, support, *args): For quantum operators with and without parameters.
-        - AST.sequence(*q_ops): For sequences of quantum operations.
-        - AST.add(lhs, rhs): For addition, lhs + rhs.
-        - AST.sub(lhs, rhs): For subtraction, lhs - rhs.
-        - AST.mul(lhs, rhs): For multiplication, lhs * rhs.
-        - AST.div(lhs, rhs): For division, lhs / rhs.
-        - AST.rem(lhs, rhs): For remainder, lhs % rhs.
-        - AST.pow(base, power): For power, base ** power.
+        AST.numeric(value): For numerical values.
+        AST.input_variable(name, size, trainable): For literal variables.
+        AST.callable(fn_name, *args): For classical functions.
+        AST.support(target, control): For qubit indices.
+        AST.quantum_op(name, support, *args): For quantum operators with and without parameters.
+        AST.sequence(*q_ops): For sequences of quantum operations.
+        AST.add(lhs, rhs): For addition, lhs + rhs.
+        AST.sub(lhs, rhs): For subtraction, lhs - rhs.
+        AST.mul(lhs, rhs): For multiplication, lhs * rhs.
+        AST.div(lhs, rhs): For division, lhs / rhs.
+        AST.rem(lhs, rhs): For remainder, lhs % rhs.
+        AST.pow(base, power): For power, base ** power.
     """
 
     class Tag(Flag):
@@ -77,7 +77,7 @@ class AST:
         """Create an AST-numeric object.
 
         Arguments:
-            - value: Numerical value to be converted in the Qadence-IR AST.
+            value: Numerical value to be converted in the Qadence-IR AST.
         """
 
         return cls.__construct__(cls.Tag.Numeric, "", value)
@@ -87,12 +87,12 @@ class AST:
         """Create an AST-input variable.
 
         Arguments:
-            - name: Variable's name.
-            - size: Number of slots to be reserved for the variable, 1 for scalar values and n>1 for
+            name: Variable's name.
+            size: Number of slots to be reserved for the variable, 1 for scalar values and n>1 for
                 array variables.
-            - trainable: A boolean flag to indicate if the variable is intend to be optimised or
+            trainable: A boolean flag to indicate if the variable is intend to be optimised or
                 used as a constand during the run.
-            - attributes: Extra flags, values or dictionaries that can provide more context to the
+            attributes: Extra flags, values or dictionaries that can provide more context to the
                 backends.
         """
 
@@ -103,8 +103,8 @@ class AST:
         """Create an AST-function object.
 
         Arguments:
-            - name: Function name.
-            - args: Arguments to be passed to the function.
+            name: Function name.
+            args: Arguments to be passed to the function.
         """
 
         return cls.__construct__(cls.Tag.Call, name, *args)
@@ -115,8 +115,8 @@ class AST:
         applied.
 
         Arguments:
-            - target: A tuple of indices a quantum operator is acting on.
-            - control: A tuple of indices a quantum operator uses as control qubits.
+            target: A tuple of indices a quantum operator is acting on.
+            control: A tuple of indices a quantum operator uses as control qubits.
         """
 
         return cls.__construct__(cls.Tag.Support, "", target, control)
@@ -133,12 +133,12 @@ class AST:
         """Create an AST-quantum operator.
 
         Arguments:
-            - name: Operator's name.
-            - target: A tuple of indices a quantum operator is acting on.
-            - control: A tuple of indices a quantum operator uses as control qubits.
-            - args: Arguments to be passed to parameteric quantum operators. Non-parametric
+            name: Operator's name.
+            target: A tuple of indices a quantum operator is acting on.
+            control: A tuple of indices a quantum operator uses as control qubits.
+            args: Arguments to be passed to parameteric quantum operators. Non-parametric
                 operators like Puali gates are treated as a parametric operator with no arguments.
-            - attributes: Extra flags, values or dictionaries that can provide more context to the
+            attributes: Extra flags, values or dictionaries that can provide more context to the
                 backends.
         """
 
@@ -150,7 +150,7 @@ class AST:
         """Create an AST-sequence of quantum operators objects.
 
         Arguments:
-            - quantum_operators: Sequence of quantum operators to be applied by the backend in the
+            quantum_operators: Sequence of quantum operators to be applied by the backend in the
                 given order.
         """
 
@@ -162,8 +162,8 @@ class AST:
         """Create an AST-arithmetic addition.
 
         Arguments:
-            - lhs: Left-hand side operand.
-            - rhs: Right-hand side operand.
+            lhs: Left-hand side operand.
+            rhs: Right-hand side operand.
         """
 
         return cls.callable("add", lhs, rhs)
@@ -173,8 +173,8 @@ class AST:
         """Create an AST-arithmetic subtraction.
 
         Arguments:
-            - lhs: Left-hand side operand.
-            - rhs: Right-hand side operand.
+            lhs: Left-hand side operand.
+            rhs: Right-hand side operand.
         """
 
         return cls.callable("sub", lhs, rhs)
@@ -184,8 +184,8 @@ class AST:
         """Create an AST-arithmetic multiplication.
 
         Arguments:
-            - lhs: Left-hand side operand.
-            - rhs: Right-hand side operand.
+            lhs: Left-hand side operand.
+            rhs: Right-hand side operand.
         """
 
         return cls.callable("mul", lhs, rhs)
@@ -195,8 +195,8 @@ class AST:
         """Create an AST-arithmetic division.
 
         Arguments:
-            - lhs: Left-hand side operand.
-            - rhs: Right-hand side operand.
+            lhs: Left-hand side operand.
+            rhs: Right-hand side operand.
         """
 
         return cls.callable("div", lhs, rhs)
@@ -206,8 +206,8 @@ class AST:
         """Create an AST-arithmetic remainder.
 
         Arguments:
-            - lhs: Left-hand side operand.
-            - rhs: Right-hand side operand.
+            lhs: Left-hand side operand.
+            rhs: Right-hand side operand.
         """
 
         return cls.callable("rem", lhs, rhs)
@@ -217,8 +217,8 @@ class AST:
         """Create an AST-arithmetic power.
 
         Arguments:
-            - base: Base operand.
-            - power: Power operand.
+            base: Base operand.
+            power: Power operand.
         """
 
         return cls.callable("pow", base, power)

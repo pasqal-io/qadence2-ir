@@ -11,8 +11,8 @@ def filter_ast(predicate: Callable[[AST], bool], ast: AST) -> Iterable[AST]:
     """Filter the elements of the AST according to the `predicate` function.
 
     Arguments:
-        - predicate: A function to check if a specific property is present in the `ast`.
-        - ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
+        predicate: A function to check if a specific property is present in the `ast`.
+        ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Return:
         An iterable and flattened version of the AST that contains the selected elements.
@@ -39,7 +39,7 @@ def flatten_ast(ast: AST) -> Iterable[AST]:
     """Returns an interable and flattened version of the AST.
 
     Arguments:
-        - ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
+        ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Return:
         An iterable and flattened version of the AST. The arguments of operations/functions will
@@ -70,7 +70,7 @@ def extract_inputs_variables(ast: AST) -> dict[str, Alloc]:
     """Convert all the input variables in the AST into allocation instructions.
 
     Arguments:
-        - ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
+        ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Returns:
         A dictionary with the variables names as keys and their respective allocation instructions
@@ -85,8 +85,8 @@ def to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
     if not present yet.
 
     Arguments:
-        - inputs: A dictionary containing pairs of variables and their allocation instructions.
-        - ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
+        inputs: A dictionary containing pairs of variables and their allocation instructions.
+        ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Return
         An updated dictionary containing pairs of variables and their allocation instructions. If
@@ -109,7 +109,7 @@ def build_instructions(ast: AST) -> list[QuInstruct | Assign]:
     instructions.
 
     Arguments:
-        - ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
+        ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Return:
         A list of quantum operations and temporary static single-assigned variables. Temporary
@@ -137,12 +137,12 @@ def to_instruct(
     assignments.
 
     Arguments:
-        - ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
-        - instructions_list: A list of quantum operations and temporary static single-assigned
+        ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
+        instructions_list: A list of quantum operations and temporary static single-assigned
             variables.
-        - memoise: A dictionary containing pairs of AST objects and the respective temporary
+        memoise: A dictionary containing pairs of AST objects and the respective temporary
             variables they were assigned to.
-        - single_assign_index: The index to be used by the next temporary variable assignement.
+        single_assign_index: The index to be used by the next temporary variable assignement.
             Tempmorary variables are labled from "%0" to "%n".
 
     Return:
