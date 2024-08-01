@@ -5,12 +5,14 @@ from typing import Any, Literal
 
 class Alloc:
     """
-    Reserve one slot for a scaler parameter in the environment and n-slots for
-    an array. The type of the parameter is defined by the backend.
+    Reserve one slot for a scaler parameter in the environment and n-slots for an array. The type of
+    the parameter is defined by the backend.
 
     Arguments:
         size: Space occupied by the parameter.
         trainable: Flag if the parameter can change during a training loop.
+        attributes: Extra flags and information to be used as instructions/suggestions by the
+            backend.
     """
 
     def __init__(self, size: int, trainable: bool, **attributes: Any) -> None:
@@ -69,9 +71,7 @@ class Load:
 
 
 class Call:
-    """
-    Indicates the call of classical functions only.
-    """
+    """Indicates the call of classical functions only."""
 
     def __init__(self, identifier: str, *args: Any) -> None:
         self.identifier = identifier
@@ -91,16 +91,14 @@ class Call:
 
 
 class Support:
-    """
-    Generic representation of the qubit support. For single qubit operations,
-    a multiple index support indicates apply the operation for each index in the
-    support.
+    """Generic representation of the qubit support. For single qubit operations, a multiple index
+    support indicates apply the operation for each index in the support.
 
     Both target and control lists must be ordered!
 
     Arguments:
-       target = Index or indices where the operation is applied.
-       control = Index or indices to which the operation is conditioned to.
+        target = Index or indices where the operation is applied.
+        control = Index or indices to which the operation is conditioned to.
     """
 
     def __init__(
@@ -136,13 +134,14 @@ class Support:
 
 
 class QuInstruct:
-    """
-    An abstract representation of a QPU instruction.
+    """An abstract representation of a QPU instruction.
 
     Arguments:
         name: The instruction name compatible with the standard instruction set.
         support: The index of qubits to which the instruction is applied to.
         args: Arguments of the instruction such as angle, duration, amplitude etc.
+        attributes: Extra flags and information to be used as instructions/suggestions by the
+            backend.
     """
 
     def __init__(self, name: str, support: Support, *args: Any, **attributes: Any):
@@ -175,33 +174,35 @@ class AllocQubits:
 
     Arguments:
         num_qubits: Number of atoms to be allocated.
-        qubit_positions: A list of discrete coordinates for 2D grid with (0,0)
-            position at center of the grid. A list of indices in a linear register.
-            An empty list will indicate the backend is free to define the topology
-            for devices that implement logical qubits.
-        grid_type: Allows to select the coordinates sets for 2D grids: "square"
-            (orthogonal) or "triangular" (skew). A "linear" will allow the backend
-            to define the shape of the register. When the `grid_type` is `None`
-            the backend uses its default structure (particular useful when
-            shuttling is available). Default value is `None`.
-        grid_scale: Adjust the distance between atoms based on a standard distance
-            defined by the backend. Default value is 1.
-        options: Extra register related properties that may not be supported by
-            all backends.
+        qubit_positions: A list of discrete coordinates for 2D grid with (0,0) position at center
+            of the grid. A list of indices in a linear register. An empty list will indicate the
+            backend is free to define the topology for devices that implement logical qubits.
+        grid_type: Allows to select the coordinates sets for 2D grids as "square" (orthogonal) or
+            "triangular" (skew). A "linear" will allow the backend to define the shape of the
+            register. When the `grid_type` is `None` the backend uses its default structure
+            (particular useful when shuttling is available). Default value is `None`.
+        grid_scale: Adjust the distance between atoms based on a standard distance defined by the
+            backend. Default value is 1.0.
+        connectivity: A dictionary containing the interaction strength between connected qubit
+            pairs. When provided, the compiler backend will try to match qubit interactions with
+            the specified connectivity map by adjusting internal parameters.
+        options: Extra register related properties that may not be supported by all backends.
     """
 
     def __init__(
         self,
         num_qubits: int,
-        qubit_positions: list[tuple[int, int]] | list[int],
+        qubit_positions: list[tuple[int, int]] | list[int] | None = None,
         grid_type: Literal["linear", "square", "triangular"] | None = None,
         grid_scale: float = 1.0,
+        connectivity: dict[tuple[int, ...], float] | None = None,
         options: dict[str, Any] | None = None,
     ) -> None:
         self.num_qubits = num_qubits
-        self.qubit_positions = qubit_positions
+        self.qubit_positions = qubit_positions or []
         self.grid_type = grid_type
         self.grid_scale = grid_scale
+        self.connectivity = connectivity or dict()
         self.options = options or dict()
 
     def __repr__(self) -> str:
@@ -224,21 +225,19 @@ class AllocQubits:
 
 
 class Model:
-    """
-    Aggregates the minimal information to construct sequence of instructions in
-    a quantum device. The structure is mainly focused in neutral atoms devices
-    but its agnostic nature may make it suitable for any quantum device.
+    """Aggregates the minimal information to construct sequence of instructions in a quantum device.
+    The structure is mainly focused in neutral atoms devices but its agnostic nature may make it
+    suitable for any quantum device.
 
     Arguments:
         register: Describe the atomic arrangement of the neutral atom register.
-        instructions:  A list of abstract instructions with their arguments with
-            which a backend can execute a sequence.
-        directives: A dictionary containing QPU related options. For instance,
-            it can be used to set the Rydberg level to be used or whether to
-            allow digital-analog operations in the sequence.
-        settings: Backend specific configurations where the user can define for
-            instance, the data type like `int64`, or the return type as
-            "counting", "vector-state" or "density-matrix".
+        instructions:  A list of abstract instructions with their arguments with which a backend
+            can execute a sequence.
+        directives: A dictionary containing QPU related options. For instance, it can be used to
+            set the Rydberg level to be used or whether to allow digital-analog operations in the
+            sequence.
+        settings: Backend specific configurations where the user can define for instance, the data
+            type like `int64`.
     """
 
     def __init__(
