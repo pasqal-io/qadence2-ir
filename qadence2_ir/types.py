@@ -195,14 +195,12 @@ class AllocQubits:
         qubit_positions: list[tuple[int, int]] | list[int] | None = None,
         grid_type: Literal["linear", "square", "triangular"] | None = None,
         grid_scale: float = 1.0,
-        connectivity: dict[tuple[int, ...], float] | None = None,
         options: dict[str, Any] | None = None,
     ) -> None:
         self.num_qubits = num_qubits
         self.qubit_positions = qubit_positions or []
         self.grid_type = grid_type
         self.grid_scale = grid_scale
-        self.connectivity = connectivity or dict()
         self.options = options or dict()
 
     def __repr__(self) -> str:
@@ -249,10 +247,10 @@ class Model:
         settings: dict[str, Any] | None = None,
     ) -> None:
         self.register = register
-        self.inputs = inputs
-        self.instructions = instructions
         self.directives = directives or dict()
         self.settings = settings or dict()
+        self.inputs = inputs
+        self.instructions = instructions
 
     def __repr__(self) -> str:
         indent = "  "
