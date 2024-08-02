@@ -12,14 +12,14 @@ Model(
         "dtype": "f32",
     },
     inputs = {
-        "x": Alloc(1, trainable=True), 
+        "x": Alloc(1, trainable=True),
     },
     instrunctions = [
-        
+
         # data encoding
         Assign("%0", Call("mul", 0.5, Load("x"))),
         QuInstruction("rx", Support(target=(0,)), Load("%0")),
-        
+
         # cnot
         QuInstruction("x", Support(target=(1,), control=(0,))),
     ],
@@ -49,10 +49,10 @@ Model(
         QuInstruct("rx", Support.target_all(), 1.570796),
         QuInstruct("dyn_local_pulse", Support.target_all(), attrs={"2pi_duration": True}),
         QuInstruct("rx", Support.target_all(), -1.570796),
-        
+
         # Entanglement
         QuInstruct("dyn_interact", Support.target_all(), 2.5),
-        
+
         # Trainable layer
         QuInstruct("dyn_pulse", Support.target_all(), Load("duration"), Load("omega"), 0.0, 0.0),
     ],
