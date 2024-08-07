@@ -183,9 +183,10 @@ class AllocQubits:
             (particular useful when shuttling is available). Default value is `None`.
         grid_scale: Adjust the distance between atoms based on a standard distance defined by the
             backend. Default value is 1.0.
-        connectivity: A dictionary containing the interaction strength between connected qubit
-            pairs. When provided, the compiler backend will try to match qubit interactions with
-            the specified connectivity map by adjusting internal parameters.
+        connectivity: A dictionary that contains the interaction strength between connected qubit
+            pairs. It is used with compiler backends that implement crossing-lattice strategies or
+            gridless models, such as `pyqtorch`. If the connectivity graph is available, these
+            backends may ignore the `qubit_positions`, `grid_type`, and `grid_scale` options.
         options: Extra register related properties that may not be supported by all backends.
     """
 
@@ -195,12 +196,14 @@ class AllocQubits:
         qubit_positions: list[tuple[int, int]] | list[int] | None = None,
         grid_type: Literal["linear", "square", "triangular"] | None = None,
         grid_scale: float = 1.0,
+        connectivity: dict[tuple[int, int], float] | None = None,
         options: dict[str, Any] | None = None,
     ) -> None:
         self.num_qubits = num_qubits
         self.qubit_positions = qubit_positions or []
         self.grid_type = grid_type
         self.grid_scale = grid_scale
+        self.connectivity = connectivity or dict()
         self.options = options or dict()
 
     def __repr__(self) -> str:
