@@ -76,7 +76,7 @@ class AST:
     def numeric(cls, value: complex | float) -> AST:
         """Create an AST-numeric object.
 
-        Arguments:
+        Args:
             value: Numerical value to be converted in the Qadence-IR AST.
         """
 
@@ -86,7 +86,7 @@ class AST:
     def input_variable(cls, name: str, size: int, trainable: bool, **attributes: Any) -> AST:
         """Create an AST-input variable.
 
-        Arguments:
+        Args:
             name: Variable's name.
             size: Number of slots to be reserved for the variable, 1 for scalar values and n>1 for
                 array variables.
@@ -102,7 +102,7 @@ class AST:
     def callable(cls, name: str, *args: Any) -> AST:
         """Create an AST-function object.
 
-        Arguments:
+        Args:
             name: Function name.
             args: Arguments to be passed to the function.
         """
@@ -114,7 +114,7 @@ class AST:
         """Create an AST-support object used to indicate to which qubits a quantum operation is
         applied.
 
-        Arguments:
+        Args:
             target: A tuple of indices a quantum operator is acting on.
             control: A tuple of indices a quantum operator uses as control qubits.
         """
@@ -132,7 +132,7 @@ class AST:
     ) -> AST:
         """Create an AST-quantum operator.
 
-        Arguments:
+        Args:
             name: Operator's name.
             target: A tuple of indices a quantum operator is acting on.
             control: A tuple of indices a quantum operator uses as control qubits.
@@ -149,7 +149,7 @@ class AST:
     def sequence(cls, *quantum_operators: Any) -> AST:
         """Create an AST-sequence of quantum operators objects.
 
-        Arguments:
+        Args:
             quantum_operators: Sequence of quantum operators to be applied by the backend in the
                 given order.
         """
@@ -161,7 +161,7 @@ class AST:
     def add(cls, lhs: AST, rhs: AST) -> AST:
         """Create an AST-arithmetic addition.
 
-        Arguments:
+        Args:
             lhs: Left-hand side operand.
             rhs: Right-hand side operand.
         """
@@ -172,7 +172,7 @@ class AST:
     def sub(cls, lhs: AST, rhs: AST) -> AST:
         """Create an AST-arithmetic subtraction.
 
-        Arguments:
+        Args:
             lhs: Left-hand side operand.
             rhs: Right-hand side operand.
         """
@@ -183,7 +183,7 @@ class AST:
     def mul(cls, lhs: AST, rhs: AST) -> AST:
         """Create an AST-arithmetic multiplication.
 
-        Arguments:
+        Args:
             lhs: Left-hand side operand.
             rhs: Right-hand side operand.
         """
@@ -194,7 +194,7 @@ class AST:
     def div(cls, lhs: AST, rhs: AST) -> AST:
         """Create an AST-arithmetic division.
 
-        Arguments:
+        Args:
             lhs: Left-hand side operand.
             rhs: Right-hand side operand.
         """
@@ -205,7 +205,7 @@ class AST:
     def rem(cls, lhs: AST, rhs: AST) -> AST:
         """Create an AST-arithmetic remainder.
 
-        Arguments:
+        Args:
             lhs: Left-hand side operand.
             rhs: Right-hand side operand.
         """
@@ -216,7 +216,7 @@ class AST:
     def pow(cls, base: AST, power: AST) -> AST:
         """Create an AST-arithmetic power.
 
-        Arguments:
+        Args:
             base: Base operand.
             power: Power operand.
         """

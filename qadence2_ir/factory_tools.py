@@ -10,7 +10,7 @@ from .types import Alloc, Assign, Call, Load, QuInstruct, Support
 def filter_ast(predicate: Callable[[AST], bool], ast: AST) -> Iterable[AST]:
     """Filter the elements of the AST according to the `predicate` function.
 
-    Arguments:
+    Args:
         predicate: A function to check if a specific property is present in the `ast`.
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
@@ -38,7 +38,7 @@ def filter_ast(predicate: Callable[[AST], bool], ast: AST) -> Iterable[AST]:
 def flatten_ast(ast: AST) -> Iterable[AST]:
     """Returns an interable and flattened version of the AST.
 
-    Arguments:
+    Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Return:
@@ -69,10 +69,10 @@ def flatten_ast(ast: AST) -> Iterable[AST]:
 def extract_inputs_variables(ast: AST) -> dict[str, Alloc]:
     """Convert all the input variables in the AST into allocation instructions.
 
-    Arguments:
+    Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
-    Returns:
+    Return:
         A dictionary with the variables names as keys and their respective allocation instructions
         as values.
     """
@@ -84,7 +84,7 @@ def to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
     """If the `ast` is an input variable, add it to the inputs to be allocated
     if not present yet.
 
-    Arguments:
+    Args:
         inputs: A dictionary containing pairs of variables and their allocation instructions.
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
@@ -108,7 +108,7 @@ def build_instructions(ast: AST) -> list[QuInstruct | Assign]:
     """Converts a sequence of instructions in the AST form into a list of Model
     instructions.
 
-    Arguments:
+    Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Return:
@@ -136,7 +136,7 @@ def to_instruct(
     assign the call to a temporary variable using memoisation to avoid duplicated
     assignments.
 
-    Arguments:
+    Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
         instructions_list: A list of quantum operations and temporary static single-assigned
             variables.

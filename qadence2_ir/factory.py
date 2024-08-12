@@ -15,7 +15,7 @@ def ir_compiler_factory(builder: IRBuilder[InputType]) -> Callable[[InputType], 
     The IR compiler must be named 'compile_to_model' by convention to ensure accessibility to other
     engines in the framework.
 
-    Arguments:
+    Args:
         builder: A concrete implementation of the generic class `IRBuilder` for a particular
             `InputType`.
 

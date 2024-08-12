@@ -8,7 +8,7 @@ class Alloc:
     Reserve one slot for a scaler parameter in the environment and n-slots for an array. The type of
     the parameter is defined by the backend.
 
-    Arguments:
+    Args:
         size: Space occupied by the parameter.
         trainable: Flag if the parameter can change during a training loop.
         attributes: Extra flags and information to be used as instructions/suggestions by the
@@ -96,7 +96,7 @@ class Support:
 
     Both target and control lists must be ordered!
 
-    Arguments:
+    Args:
         target = Index or indices where the operation is applied.
         control = Index or indices to which the operation is conditioned to.
     """
@@ -136,7 +136,7 @@ class Support:
 class QuInstruct:
     """An abstract representation of a QPU instruction.
 
-    Arguments:
+    Args:
         name: The instruction name compatible with the standard instruction set.
         support: The index of qubits to which the instruction is applied to.
         args: Arguments of the instruction such as angle, duration, amplitude etc.
@@ -172,7 +172,7 @@ class AllocQubits:
     """
     Describes the register configuration in a neutral-atoms device.
 
-    Arguments:
+    Args:
         num_qubits: Number of atoms to be allocated.
         qubit_positions: A list of discrete coordinates for 2D grid with (0,0) position at center
             of the grid. A list of indices in a linear register. An empty list will indicate the
@@ -230,7 +230,7 @@ class Model:
     The structure is mainly focused in neutral atoms devices but its agnostic nature may make it
     suitable for any quantum device.
 
-    Arguments:
+    Args:
         register: Describe the atomic arrangement of the neutral atom register.
         instructions:  A list of abstract instructions with their arguments with which a backend
             can execute a sequence.
