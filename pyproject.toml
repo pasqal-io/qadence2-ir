@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "qadence2-ir"
 description = "Qadence 2 Intermediate Representation (IR) components."
 readme = "README.md"
-version = "0.1.1"
+version = "0.1.2"
 requires-python = ">=3.10,<3.12"
 license = { text = "Apache 2.0" }
 keywords = ["quantum"]
