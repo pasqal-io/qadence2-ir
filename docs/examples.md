@@ -149,16 +149,16 @@ Model(
 
 ```python
 Model(
-  register=AllocQubits(
-    num_qubits=3,
-    connectivity={(0,1): 1., (0,2): .5, (1,2): .5},
-  ),
-  directives={"dmm": {"targets": [2]}},
-  inputs={'t': Alloc(1, trainable=True)},
-  instructions=[
-    Assign('%0', Mul(1.57, Load('t')),
-    QuInstruct(‘x', Support(target=(2,))),
-    QuInstruct('dyn_pulse', target_all(), Load('%0'), 1.0),
-  ],
+    register=AllocQubits(
+        num_qubits=3,
+        connectivity={(0,1): 1., (0,2): .5, (1,2): .5},
+    ),
+    directives={"dmm": {"targets": [2]}},
+    inputs={'t': Alloc(1, trainable=True)},
+    instructions=[
+        Assign('%0', Mul(1.57, Load('t')),
+        QuInstruct('x', Support(target=(2,))),
+        QuInstruct('dyn_pulse', target_all(), Load('%0'), 1.0),
+    ],
 )
 ```
