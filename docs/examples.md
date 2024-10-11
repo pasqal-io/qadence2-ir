@@ -153,11 +153,18 @@ Model(
         num_qubits=3,
         connectivity={(0,1): 1., (0,2): .5, (1,2): .5},
     ),
-    directives={"dmm": {"targets": [2]}},
-    inputs={'t': Alloc(1, trainable=True)},
+    directives={
+        "dmm": {"targets": [0, 1]}
+    },
+    inputs={
+        't': Alloc(1, trainable=True)
+    },
     instructions=[
-        Assign('%0', Mul(1.57, Load('t')),
+        # The presence of the `dmm` allows a single qubit operation by
+        # dynamic decoupling the others two qubits.
         QuInstruct('x', Support(target=(2,))),
+
+        Assign('%0', Mul(1.57, Load('t')),
         QuInstruct('dyn_pulse', target_all(), Load('%0'), 1.0),
     ],
 )
