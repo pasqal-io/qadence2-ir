@@ -30,13 +30,13 @@ Model(
     directives = {
         "dmm": {
             "targets": [0, 1, 2, 3],
-            "weights": "from_inputs",
+            "weights": "equal",
         }
     },
     settings = {},
     inputs = {
         "theta": Alloc(4, trainable=False)
-        "duration": Alloc(1, trainable=True, attrs={"time_parameter": True})
+        "duration": Alloc(1, trainable=True)
         "omega": Alloc(5, trainable=True)
     },
     instrunctions = [
@@ -69,19 +69,11 @@ Model(
         grid_type = "triangular",
         grid_scale = 1.0,
     ),
-    directives = { # for QPU options
-        "rydberg_level": 65,
-        "max_amplitude": 5.5,
-        "max_abs_detuning": 70.0,
-
+    directives = {
         "dmm": {
             "targets": [0, 3],
             "weights": [0.5, 1.0],
         }
-    },
-    settings = {  # for building options
-        "prioritize_speed": True,
-        "multiplex": "max"
     },
     inputs = {
         "duration": Alloc(1, trainable=False, attrs={"time_parameter": True}),
@@ -123,19 +115,11 @@ Model(
             (2, 3): 2.1,
         }
     ),
-    directives = { # for QPU options
-
-        "rydberg_level": 65,
-        "max_amplitude": 5.5,
-        "max_abs_detuning": 70.0,
-
+    directives = {
         "dmm": {
             "targets": [0, 3],
             "weights": [0.5, 1.0],
         }
-    },
-    settings = {  # for building options
-        "prioritize_speed": True,
     },
     inputs = {
         "duration": Alloc(1, trainable=False, attrs={"time_parameter": True}),
