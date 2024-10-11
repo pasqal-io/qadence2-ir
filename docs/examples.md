@@ -156,15 +156,9 @@ Model(
   directives={"dmm": {"targets": [2]}},
   inputs={'t': Alloc(1, trainable=True)},
   instructions=[
-    Assign(‘%0’, Mul(1.57, Load(‘t’)),
+    Assign('%0', Mul(1.57, Load('t')),
     QuInstruct(‘x', Support(target=(2,))),
-    QuInstruct('dyn_pulse’, target_all(), Load(‘%0’), 1.0),
+    QuInstruct('dyn_pulse', target_all(), Load('%0'), 1.0),
   ],
 )
-
-instructions =[
-    Assign("%0", Call("mul", 0.5, Load("theta")),
-    QuInstruct("rx", Support(target=(0)), Load("%0")),
-    QuInstruct("dyn_interact", Support.target_all(), 2.5),
-]
 ```
