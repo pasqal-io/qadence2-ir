@@ -1,15 +1,3 @@
-# Qadence 2 IR
+# Qadence IR
 
-Qadence 2 Intermediate Representation (IR) components.
-
-## Installation
-Installation guidelines
-
-## Usage
-Usage guidelines
-
-## Documentation
-Documentation guidelines
-
-## Contribute
-Contribution guidelines
+Qadence IR is a Pasqal initiative, to define an intermediate representation structure for neutral atom devices. The structure captures the key elements of the platform while remaining agnostic regarding hardware specifications. The goal is to simplify the instruction building of analog quantum algorithms, enabling optimized instructions and compilation processes of task-specific algorithms to different platforms. By using an agnostic instruction set, Qadence IR allows digital and analog instructions to work together, extending its usability to the digital-analog paradigm. The static single-assignment simplifies differentiability when running simulations.
