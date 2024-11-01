@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from qadence2_ir.types import Alloc, Assign, Load
+from qadence2_ir.types import Alloc, Assign, Call, Load
 
 
 def test_alloc_repr() -> None:
@@ -46,3 +46,16 @@ def test_load_eq() -> None:
     assert Load("my-var") == Load("my-var")
     assert Load("x") != Load("y")
     assert Load("x") != "x"
+
+
+def test_call_repr() -> None:
+    assert Call("my-func").__repr__() == "Call('my-func')"
+    assert Call("my-func", 9, "str").__repr__() == "Call('my-func', 9, 'str')"
+
+
+def test_call_eq() -> None:
+    assert Call("my-func") == Call("my-func")
+    assert Call("my-func", 3) == Call("my-func", 3)
+    assert Call("my-func") != Call("fibonaci")
+    assert Call("my-func", 2) != Call("my-func", 4)
+    assert Call("my-func", []) != Call("my-func", 4)
