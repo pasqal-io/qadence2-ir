@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from qadence2_ir.types import Alloc, Assign, Call, Load
+import pytest
+
+from qadence2_ir.types import Alloc, Assign, Call, Load, Support
 
 
 def test_alloc_repr() -> None:
@@ -59,3 +61,36 @@ def test_call_eq() -> None:
     assert Call("my-func") != Call("fibonaci")
     assert Call("my-func", 2) != Call("my-func", 4)
     assert Call("my-func", []) != Call("my-func", 4)
+
+
+def test_support_init() -> None:
+    only_target = Support((0,))
+    assert only_target.target == (0,)
+    assert only_target.control == ()
+
+    with pytest.raises(TypeError):
+        Support(control=(0,))  # type: ignore
+
+    target_and_control = Support((2, 0), (1,))
+    assert target_and_control.target == (2, 0)
+    assert target_and_control.control == (1,)
+
+    target_all = Support.target_all()
+    assert target_all.target == ()
+    assert target_all.control == ()
+
+
+def test_support_repr() -> None:
+    assert repr(Support((0,))) == "Support(target=(0,))"
+    assert repr(Support((1,), (0,))) == "Support(target=(1,), control=(0,))"
+    assert repr(Support(())) == "Support.target_all()"
+    assert repr(Support.target_all()) == "Support.target_all()"
+
+
+def test_support_eq() -> None:
+    assert Support((0,)) == Support((0,))
+    assert Support((0,), (1, 3)) == Support((0,), (1, 3))
+    assert Support((0,)) != Support((1,))
+    assert Support((0,), (1,)) != Support((0,))
+    assert Support((0,), (1,)) != Support((0,), (3, 0))
+    assert Support((3,)) != "Support((3,))"
