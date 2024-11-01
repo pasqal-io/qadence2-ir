@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from functools import partial
+
 from qadence2_ir.types import Alloc
 
 
@@ -10,3 +12,10 @@ def test_alloc_repr() -> None:
         Alloc(1, False, attr1=5, attr2=[5, 6, 3]).__repr__()
         == "Alloc(1, trainable=False, attrs={'attr1': 5, 'attr2': [5, 6, 3]})"
     )
+
+
+def test_alloc_eq() -> None:
+    init_alloc = partial(Alloc.__init__, 3, True, attributes={"test": 8, "bla": (2, "str", 84.2)})
+    assert init_alloc() == init_alloc()
+    not_implemented = init_alloc().__eq__([])
+    assert init_alloc().__eq__([]) is NotImplemented
