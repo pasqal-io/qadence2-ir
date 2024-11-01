@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from qadence2_ir.types import Alloc, Assign
+from qadence2_ir.types import Alloc, Assign, Load
 
 
 def test_alloc_repr() -> None:
@@ -36,3 +36,13 @@ def test_assign_eq() -> None:
     assert Assign("x", 2) != Assign("y", 2)
     assert Assign("x", 1) != Assign("x", 34)
     assert Assign("x", 5).__eq__({}) is NotImplemented
+
+
+def test_load_repr() -> None:
+    assert Load("my-var").__repr__() == "Load('my-var')"
+
+
+def test_load_eq() -> None:
+    assert Load("my-var") == Load("my-var")
+    assert Load("x") != Load("y")
+    assert Load("x") != "x"
