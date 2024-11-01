@@ -106,7 +106,6 @@ class Support:
 
     def __init__(
         self,
-        *,
         target: tuple[int, ...],
         control: tuple[int, ...] | None = None,
     ) -> None:
