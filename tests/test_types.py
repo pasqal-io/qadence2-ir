@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from qadence2_ir.types import Alloc, Assign, Call, Load, Support
+from qadence2_ir.types import Alloc, Assign, Call, Load, QuInstruct, Support
 
 
 def test_alloc_repr() -> None:
@@ -94,3 +94,28 @@ def test_support_eq() -> None:
     assert Support((0,), (1,)) != Support((0,))
     assert Support((0,), (1,)) != Support((0,), (3, 0))
     assert Support((3,)) != "Support((3,))"
+
+
+@pytest.fixture
+def support_control_target() -> Support:
+    return Support((0,), (1,))
+
+
+def test_qu_instruct_repr(support_control_target: Support) -> None:
+    assert (
+        repr(QuInstruct("CNOT", support_control_target))
+        == f"QuInstruct('CNOT', {repr(support_control_target)})"
+    )
+    assert (
+        repr(QuInstruct("CNOT", support_control_target, 1, "l", [], one=1, two=2.0))
+        == f"QuInstruct('CNOT', {repr(support_control_target)}, 1, 'l', [], "
+        f"attrs={{'one': 1, 'two': 2.0}})"
+    )
+
+
+def test_qu_instruct_eq(support_control_target: Support) -> None:
+    assert QuInstruct("CNOT", support_control_target) == QuInstruct("CNOT", support_control_target)
+    assert QuInstruct("CNOT", support_control_target, 1, "a", k=8.0) == QuInstruct(
+        "CNOT", support_control_target, 1, "a", k=8.0
+    )
+    assert QuInstruct("CNOT", support_control_target) != "CNOT"
