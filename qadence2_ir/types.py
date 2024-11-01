@@ -78,8 +78,11 @@ class Call:
         self.args = args
 
     def __repr__(self) -> str:
-        args = ", ".join(map(repr, self.args))
-        return f"{self.__class__.__name__}({repr(self.identifier)}, {args})"
+        if not self.args:
+            return f"{self.__class__.__name__}({repr(self.identifier)})"
+        else:
+            args = ", ".join(map(repr, self.args))
+            return f"{self.__class__.__name__}({repr(self.identifier)}, {args})"
 
     def __eq__(self, value: object) -> bool:
         if not isinstance(value, Call):
