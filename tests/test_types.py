@@ -6,10 +6,10 @@ from qadence2_ir.types import Alloc, Assign, Call, Load, QuInstruct, Support
 
 
 def test_alloc_repr() -> None:
-    assert Alloc(1, True).__repr__() == "Alloc(1, trainable=True)"
-    assert Alloc(6, False).__repr__() == "Alloc(6, trainable=False)"
+    assert repr(Alloc(1, True)) == "Alloc(1, trainable=True)"
+    assert repr(Alloc(6, False)) == "Alloc(6, trainable=False)"
     assert (
-        Alloc(1, False, attr1=5, attr2=[5, 6, 3]).__repr__()
+        repr(Alloc(1, False, attr1=5, attr2=[5, 6, 3]))
         == "Alloc(1, trainable=False, attrs={'attr1': 5, 'attr2': [5, 6, 3]})"
     )
 
@@ -25,10 +25,10 @@ def test_alloc_eq() -> None:
 
 
 def test_assign_repr() -> None:
-    assert Assign("my-var", 8).__repr__() == "Assign('my-var', 8)"
-    assert Assign("my-var", 3.14).__repr__() == "Assign('my-var', 3.14)"
+    assert repr(Assign("my-var", 8)) == "Assign('my-var', 8)"
+    assert repr(Assign("my-var", 3.14)) == "Assign('my-var', 3.14)"
     assert (
-        Assign("var*with@non$standard123characters", [3, 2, 1]).__repr__()
+        repr(Assign("var*with@non$standard123characters", [3, 2, 1]))
         == "Assign('var*with@non$standard123characters', [3, 2, 1])"
     )
 
@@ -41,7 +41,7 @@ def test_assign_eq() -> None:
 
 
 def test_load_repr() -> None:
-    assert Load("my-var").__repr__() == "Load('my-var')"
+    assert repr(Load("my-var")) == "Load('my-var')"
 
 
 def test_load_eq() -> None:
@@ -51,8 +51,8 @@ def test_load_eq() -> None:
 
 
 def test_call_repr() -> None:
-    assert Call("my-func").__repr__() == "Call('my-func')"
-    assert Call("my-func", 9, "str").__repr__() == "Call('my-func', 9, 'str')"
+    assert repr(Call("my-func")) == "Call('my-func')"
+    assert repr(Call("my-func", 9, "str")) == "Call('my-func', 9, 'str')"
 
 
 def test_call_eq() -> None:
