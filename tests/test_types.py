@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from qadence2_ir.types import Alloc, Assign, Call, Load, QuInstruct, Support
+from qadence2_ir.types import Alloc, AllocQubits, Assign, Call, Load, QuInstruct, Support
 
 
 def test_alloc_repr() -> None:
@@ -119,3 +119,28 @@ def test_qu_instruct_eq(support_control_target: Support) -> None:
         "CNOT", support_control_target, 1, "a", k=8.0
     )
     assert QuInstruct("CNOT", support_control_target) != "CNOT"
+
+
+def test_alloc_qubits_repr() -> None:
+    assert repr(AllocQubits(4)) == "AllocQubits(4)"
+    assert (
+        repr(AllocQubits(2, [(0, 0), (4, 1), (-1, 5)], grid_type="linear", grid_scale=2.4))
+        == "AllocQubits(2, qubit_positions=[(0, 0), (4, 1), (-1, 5)], grid_type='linear', "
+        "grid_scale=2.4)"
+    )
+    assert (
+        repr(
+            AllocQubits(
+                3, connectivity={(0, 1): 1.0, (1, 2): 1.5, (0, 2): 0.8}, options={"option1": True}
+            )
+        )
+        == "AllocQubits(3, connectivity={(0, 1): 1.0, (1, 2): 1.5, (0, 2): 0.8}, "
+        "options={'option1': True})"
+    )
+
+
+def test_alloc_qubits_eq() -> None:
+    assert AllocQubits(1) == AllocQubits(1)
+    assert AllocQubits(3) != AllocQubits(2)
+    assert AllocQubits(1, qubit_positions=[(0, 0)]) != AllocQubits(1, qubit_positions=[(2, 1)])
+    assert AllocQubits(3).__eq__("3-qubits") is NotImplemented

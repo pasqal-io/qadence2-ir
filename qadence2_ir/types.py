@@ -214,7 +214,7 @@ class AllocQubits:
             arguments += f", qubit_positions={self.qubit_positions}"
         if self.grid_type is not None:
             arguments += f", grid_type='{self.grid_type}'"
-        if self.grid_scale:
+        if self.grid_scale != 1.0:
             arguments += f", grid_scale={self.grid_scale}"
         if len(self.connectivity) > 0:
             arguments += f", connectivity={self.connectivity}"
