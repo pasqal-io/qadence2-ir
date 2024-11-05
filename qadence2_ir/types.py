@@ -269,25 +269,29 @@ class Model:
 
     def __repr__(self) -> str:
         indent = "  "
-        acc = f"{self.__class__.__name__}("
+        result = f"{self.__class__.__name__}(\n"
+        result += f"{indent}{self.register},\n"
+        result += f"{indent}{'{'}\n"
+        for key, value in self.inputs.items():
+            result += f"{indent}{indent}'{key}': {value},\n"
+        result += f"{indent}{'}'},\n"
+        result += f"{indent}[\n"
+        for item in self.instructions:
+            result += f"{indent}{indent}{item},\n"
+        result += f"{indent}]"
 
-        for field, value in self.__dict__.items():
-            if isinstance(value, AllocQubits):
-                acc += f"\n{indent}{field}={value.__class__.__name__}("
-                items = ",\n".join(f"{indent * 2}{k}={v}" for k, v in value.__dict__.items())
-                acc += (f"\n{items},\n{indent}" if items else "") + "),"
-
-            elif isinstance(value, dict):
-                acc += f"\n{indent}{field}={{"
-                items = ",\n".join(f"{indent * 2}{repr(k)}: {v}" for k, v in value.items())
-                acc += (f"\n{items},\n{indent}" if items else "") + "},"
-
-            elif isinstance(value, list):
-                acc += f"\n{indent}{field}=["
-                items = ",\n".join(f"{indent * 2}{item}" for item in self.instructions)
-                acc += (f"\n{items},\n{indent}" if items else "") + "],"
-
-        return acc + "\n)"
+        if self.directives != dict():
+            result += f",\n{indent}directives={'{'}\n"
+            for key, value in self.directives.items():
+                result += f"{indent}{indent}'{key}': {value},\n"
+            result += f"{indent}{'}'}"
+        if self.settings != dict():
+            result += f",\n{indent}settings={'{'}\n"
+            for key, value in self.settings.items():
+                result += f"{indent}{indent}'{key}': {value},\n"
+            result += f"{indent}{'}'}"
+        result += "\n)"
+        return result
 
     def __eq__(self, value: object) -> bool:
         if not isinstance(value, Model):
