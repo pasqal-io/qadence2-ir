@@ -81,8 +81,8 @@ def test_support_init() -> None:
 
 
 def test_support_repr() -> None:
-    assert repr(Support((0,))) == "Support(target=(0,))"
-    assert repr(Support((1,), (0,))) == "Support(target=(1,), control=(0,))"
+    assert repr(Support((0,))) == "Support((0,))"
+    assert repr(Support((1,), (0,))) == "Support((1,), control=(0,))"
     assert repr(Support(())) == "Support.target_all()"
     assert repr(Support.target_all()) == "Support.target_all()"
 
@@ -109,7 +109,7 @@ def test_qu_instruct_repr(support_control_target: Support) -> None:
     assert (
         repr(QuInstruct("CNOT", support_control_target, 1, "l", [], one=1, two=2.0))
         == f"QuInstruct('CNOT', {repr(support_control_target)}, 1, 'l', [], "
-        f"attrs={{'one': 1, 'two': 2.0}})"
+        f"attributes={{'one': 1, 'two': 2.0}})"
     )
 
 

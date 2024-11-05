@@ -120,7 +120,7 @@ class Support:
         if not self.target:
             return f"{self.__class__.__name__}.target_all()"
 
-        subspace = f"target={self.target}"
+        subspace = f"{self.target}"
         if self.control:
             subspace += f", control={self.control}"
 
@@ -158,7 +158,7 @@ class QuInstruct:
         if args:
             params += ", " + args
         if self.attrs:
-            params += f", attrs={self.attrs}"
+            params += f", attributes={self.attrs}"
         return f"{self.__class__.__name__}({params})"
 
     def __eq__(self, value: object) -> bool:
@@ -209,8 +209,18 @@ class AllocQubits:
         self.options = options or dict()
 
     def __repr__(self) -> str:
-        items = ", ".join(f"{k}={v}" for k, v in self.__dict__.items())
-        return f"{self.__class__.__name__}({items})"
+        arguments = f"{self.num_qubits}"
+        if len(self.qubit_positions) > 0:
+            arguments += f", qubit_positions={self.qubit_positions}"
+        if self.grid_type is not None:
+            arguments += f", grid_type='{self.grid_type}'"
+        if self.grid_scale:
+            arguments += f", grid_scale={self.grid_scale}"
+        if len(self.connectivity) > 0:
+            arguments += f", connectivity={self.connectivity}"
+        if len(self.options) > 0:
+            arguments += f", options={self.options}"
+        return f"{self.__class__.__name__}({arguments})"
 
     def __eq__(self, value: object) -> bool:
         if not isinstance(value, AllocQubits):
