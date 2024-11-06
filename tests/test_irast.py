@@ -11,6 +11,7 @@ def test_numeric() -> None:
     assert ast._head == ""
     assert ast._args == (0,)
     assert ast.attrs == dict()
+    assert ast.is_numeric
 
 
 def test_input_variable() -> None:
@@ -19,6 +20,7 @@ def test_input_variable() -> None:
     assert ast._head == "my-var"
     assert ast._args == (1, True)
     assert ast._attrs == {"attr1": "value"}
+    assert ast.is_input_variable
 
 
 def test_callable() -> None:
@@ -26,6 +28,7 @@ def test_callable() -> None:
     assert ast._tag == ast.Tag.Call
     assert ast._head == "my-func"
     assert ast._args == (2, "magic")
+    assert ast.is_callable
 
 
 def test_support() -> None:
@@ -33,6 +36,7 @@ def test_support() -> None:
     assert ast._tag == ast.Tag.Support
     assert ast._head == ""
     assert ast._args == ((0, 1), (2, 3))
+    assert ast.is_support
 
 
 def test_quantum_op() -> None:
@@ -41,6 +45,7 @@ def test_quantum_op() -> None:
     assert ast._head == "CNOT"
     assert ast._args == (AST.support((0,), (1,)), "arg1")
     assert ast._attrs == {"kwarg1": 8, "kwarg2": "my-compiler-flag"}
+    assert ast.is_quantum_op
 
 
 def test_sequence() -> None:
@@ -50,6 +55,7 @@ def test_sequence() -> None:
     assert ast._head == ""
     assert ast._args == (*operators,)
     assert ast._attrs == dict()
+    assert ast.is_sequence
 
 
 @pytest.mark.parametrize(
