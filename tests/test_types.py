@@ -17,13 +17,11 @@ def test_alloc_repr() -> None:
 
 
 def test_alloc_eq() -> None:
-    def create_alloc() -> Alloc:
-        return Alloc(3, True, attributes={"test": 8, "bla": (2, "str", 84.2)})
-
-    assert create_alloc() == create_alloc()
-    assert create_alloc() != Alloc(1, True)
-    assert create_alloc() != Alloc(1, False)
-    assert create_alloc().__eq__([]) is NotImplemented
+    alloc = Alloc(3, True, attributes={"test": 8, "bla": (2, "str", 84.2)})
+    assert alloc == deepcopy(alloc)
+    assert alloc != Alloc(1, True)
+    assert alloc != Alloc(1, False)
+    assert alloc.__eq__([]) is NotImplemented
 
 
 def test_assign_repr() -> None:
