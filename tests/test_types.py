@@ -63,6 +63,7 @@ def test_call_eq() -> None:
     assert Call("my-func") != Call("fibonaci")
     assert Call("my-func", 2) != Call("my-func", 4)
     assert Call("my-func", []) != Call("my-func", 4)
+    assert Call("function", 3).__eq__(7) is NotImplemented
 
 
 def test_support_init() -> None:
