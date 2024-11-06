@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from copy import deepcopy
+
 import pytest
 
-from qadence2_ir.types import Alloc, AllocQubits, Assign, Call, Load, QuInstruct, Support
+from qadence2_ir.types import Alloc, AllocQubits, Assign, Call, Load, Model, QuInstruct, Support
 
 
 def test_alloc_repr() -> None:
@@ -144,3 +146,59 @@ def test_alloc_qubits_eq() -> None:
     assert AllocQubits(3) != AllocQubits(2)
     assert AllocQubits(1, qubit_positions=[(0, 0)]) != AllocQubits(1, qubit_positions=[(2, 1)])
     assert AllocQubits(3).__eq__("3-qubits") is NotImplemented
+
+
+@pytest.fixture
+def simple_model() -> Model:
+    register = AllocQubits(3)
+    inputs = {"input1": Alloc(1, False), "input2": Alloc(4, True)}
+    instructions: list[Assign | QuInstruct] = [
+        Assign("var1", 10),
+        QuInstruct("CNOT", Support((0,), (1,))),
+        QuInstruct("RX", Support.target_all(), 3.14),
+    ]
+    return Model(register, inputs, instructions)
+
+
+@pytest.fixture
+def model_with_directives_settings(simple_model: Model) -> Model:
+    new_model = deepcopy(simple_model)
+    new_model.directives = {"option1": 3, "option2": True}
+    new_model.settings = {"setting1": 18.0}
+    return new_model
+
+
+def test_model_repr(simple_model: Model, model_with_directives_settings: Model) -> None:
+    expected = f"""Model(
+  {simple_model.register},
+  {'{'}
+    'input1': {simple_model.inputs["input1"]},
+    'input2': {simple_model.inputs["input2"]},
+  {'}'},
+  [
+    {simple_model.instructions[0]},
+    {simple_model.instructions[1]},
+    {simple_model.instructions[2]},
+  ]
+)"""
+    assert repr(simple_model) == expected
+    expected2 = (
+        expected[:-2]
+        + """,
+  directives={
+    'option1': 3,
+    'option2': True,
+  },
+  settings={
+    'setting1': 18.0,
+  }
+)"""
+    )
+    assert repr(model_with_directives_settings) == expected2
+
+
+def test_model_eq(simple_model: Model, model_with_directives_settings: Model) -> None:
+    assert simple_model == deepcopy(simple_model)
+    assert model_with_directives_settings == deepcopy(model_with_directives_settings)
+    assert simple_model != model_with_directives_settings
+    assert simple_model.__eq__("model") is NotImplemented
