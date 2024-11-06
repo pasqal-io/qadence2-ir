@@ -97,11 +97,6 @@ def test_support_eq() -> None:
     assert Support((3,)) != "Support((3,))"
 
 
-@pytest.fixture
-def support_control_target() -> Support:
-    return Support((0,), (1,))
-
-
 def test_qu_instruct_repr(support_control_target: Support) -> None:
     assert (
         repr(QuInstruct("CNOT", support_control_target))
@@ -145,26 +140,6 @@ def test_alloc_qubits_eq() -> None:
     assert AllocQubits(3) != AllocQubits(2)
     assert AllocQubits(1, qubit_positions=[(0, 0)]) != AllocQubits(1, qubit_positions=[(2, 1)])
     assert AllocQubits(3).__eq__("3-qubits") is NotImplemented
-
-
-@pytest.fixture
-def simple_model() -> Model:
-    register = AllocQubits(3)
-    inputs = {"input1": Alloc(1, False), "input2": Alloc(4, True)}
-    instructions: list[Assign | QuInstruct] = [
-        Assign("var1", 10),
-        QuInstruct("CNOT", Support((0,), (1,))),
-        QuInstruct("RX", Support.target_all(), 3.14),
-    ]
-    return Model(register, inputs, instructions)
-
-
-@pytest.fixture
-def model_with_directives_settings(simple_model: Model) -> Model:
-    new_model = deepcopy(simple_model)
-    new_model.directives = {"option1": 3, "option2": True}
-    new_model.settings = {"setting1": 18.0}
-    return new_model
 
 
 def test_model_repr(simple_model: Model, model_with_directives_settings: Model) -> None:
