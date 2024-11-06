@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from qadence2_ir import AST
 
 
@@ -48,3 +50,23 @@ def test_sequence() -> None:
     assert ast._head == ""
     assert ast._args == (*operators,)
     assert ast._attrs == dict()
+
+
+@pytest.mark.parametrize(
+    ["operation", "predicate"],
+    [
+        ("add", "is_addition"),
+        ("sub", "is_subtraction"),
+        ("mul", "is_multiplication"),
+        ("div", "is_division"),
+        ("pow", "is_power"),
+    ],
+)
+def test_add(asts_for_arithmetic: tuple[AST, AST], operation: str, predicate: str) -> None:
+    func = getattr(AST, operation)
+    ast = func(*asts_for_arithmetic)
+    assert ast._tag == ast.Tag.Call
+    assert ast._head == operation
+    assert ast._args == (*asts_for_arithmetic,)
+    assert ast._attrs == dict()
+    assert getattr(ast, predicate)

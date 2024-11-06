@@ -26,3 +26,8 @@ def quantum_ast() -> AST:
     q_op = AST.quantum_op("rx", (0,), (1,), fn)
 
     return q_op
+
+
+@pytest.fixture
+def asts_for_arithmetic() -> tuple[AST, AST]:
+    return (AST.numeric(0.5 + 1j), AST.quantum_op("CNOT", (0,), (1,)))
