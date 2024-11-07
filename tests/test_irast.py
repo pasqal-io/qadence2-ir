@@ -76,3 +76,21 @@ def test_add(asts_for_arithmetic: tuple[AST, AST], operation: str, predicate: st
     assert ast._args == (*asts_for_arithmetic,)
     assert ast._attrs == dict()
     assert getattr(ast, predicate)
+
+
+def test_eq() -> None:
+    # Not an ATS object
+    assert AST.numeric(2.0).__eq__(2.0) is NotImplemented
+    # Same tag and head
+    assert AST.numeric(2) == AST.numeric(2)
+    # Same tag and head but different args
+    assert AST.callable("my-func", 9, 4) != AST.callable("my-func", 8, 2)
+    # Same tag and head but different kwargs
+    assert AST.input_variable("my-var", 1, True, kwarg=8) != AST.input_variable(
+        "my-var", 1, True, kwarg=2
+    )
+    # Different tag
+    assert AST.numeric(2) != AST.support((), ())
+    # Multiplication and addition in different order
+    assert AST.mul(AST.numeric(4), AST.numeric(2)) == AST.mul(AST.numeric(2), AST.numeric(4))
+    assert AST.add(AST.numeric(4), AST.numeric(2)) == AST.add(AST.numeric(2), AST.numeric(4))
