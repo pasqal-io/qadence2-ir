@@ -94,3 +94,9 @@ def test_eq() -> None:
     # Multiplication and addition in different order
     assert AST.mul(AST.numeric(4), AST.numeric(2)) == AST.mul(AST.numeric(2), AST.numeric(4))
     assert AST.add(AST.numeric(4), AST.numeric(2)) == AST.add(AST.numeric(2), AST.numeric(4))
+
+
+def test_repr() -> None:
+    ast = AST.input_variable("my-var", 8, False, kwarg1=3, kwarg2="value")
+    expected = "Tag.InputVariable('my-var', 8, False, kwarg1=3, kwarg2='value')"
+    assert repr(ast) == expected
