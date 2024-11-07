@@ -79,6 +79,13 @@ def test_add(asts_for_arithmetic: tuple[AST, AST], operation: str, predicate: st
     assert getattr(ast, predicate)
 
 
+def test_hash() -> None:
+    assert hash(AST.numeric(4)) == hash(AST.numeric(4))
+    assert hash(AST.add(AST.numeric(2), AST.numeric(3))) == hash(
+        AST.add(AST.numeric(3), AST.numeric(2))
+    )
+
+
 def test_eq() -> None:
     # Not an ATS object
     assert AST.numeric(2.0).__eq__(2.0) is NotImplemented
