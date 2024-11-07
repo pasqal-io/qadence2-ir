@@ -65,6 +65,7 @@ def test_sequence() -> None:
         ("sub", "is_subtraction"),
         ("mul", "is_multiplication"),
         ("div", "is_division"),
+        ("rem", "is_remainder"),
         ("pow", "is_power"),
     ],
 )
