@@ -41,6 +41,7 @@ jobs:
       with:
         name: "coverage-data"
         path: .coverage
+        include-hidden-files: true
         if-no-files-found: ignore
 
   publish:
