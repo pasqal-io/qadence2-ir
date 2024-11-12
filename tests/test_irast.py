@@ -105,6 +105,10 @@ def test_eq() -> None:
 
 
 def test_repr() -> None:
-    ast = AST.input_variable("my-var", 8, False, kwarg1=3, kwarg2="value")
-    expected = "Tag.InputVariable('my-var', 8, False, kwarg1=3, kwarg2='value')"
+    ast = AST.input_variable("my-var", 5, True)
+    expected = "Tag.InputVariable('my-var', 5, True)"
     assert repr(ast) == expected
+
+    ast_kwargs = AST.input_variable("my-var", 8, False, kwarg1=3, kwarg2="value")
+    expected_kwargs = "Tag.InputVariable('my-var', 8, False, kwarg1=3, kwarg2='value')"
+    assert repr(ast_kwargs) == expected_kwargs
