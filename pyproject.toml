@@ -13,6 +13,8 @@ keywords = ["quantum"]
 authors = [
   { name = "Kaonan Micadei", email = "kaonan.micadei@pasqal.com" },
   { name = "Eduardo Maschio", email = "eduardo.maschio@pasqal.com" },
+  { name = "Roland Guichard", email = "roland.guichard@pasqal.com" },
+  { name = "Pim Venderbosch", email = "pim.venderbosch@pasqal.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -58,11 +60,11 @@ dependencies = [
 ]
 
 [tool.hatch.envs.default.scripts]
-test = "pytest -n auto --cov-config=pyproject.toml --ignore=./tests/test_examples.py {args}"
+test = "pytest -n auto --cov-config=pyproject.toml --cov=qadence2_ir {args}"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = """-vvv --cov-report=term-missing --cov-config=pyproject.toml --cov=template_python --cov=tests"""
+addopts = """-vvv --cov-config=pyproject.toml --cov=qadence2_ir"""
 xfail_strict = true
 filterwarnings = [
   "ignore:Call to deprecated create function FieldDescriptor",
@@ -109,12 +111,6 @@ packages = ["qadence2_ir"]
 [tool.coverage.run]
 branch = true
 parallel = true
-# uncomment to omit any file from the
-# coverage. Regexps can be used
-# to select all files from a folder
-#omit = [
-#  "template_python/to_omit.py",
-#]
 
 [tool.coverage.report]
 exclude_lines = [
