@@ -59,4 +59,3 @@ def model_with_directives_settings(simple_model: Model) -> Model:
 @pytest.fixture
 def asts_for_arithmetic() -> tuple[AST, AST]:
     return (AST.numeric(0.5 + 1j), AST.quantum_op("CNOT", (0,), (1,)))
-
