@@ -291,8 +291,9 @@ class AST:
         return self._args == other._args and self._attrs == other._attrs
 
     def __repr__(self) -> str:
-       # args
+        result = f"{self._tag}('{self._head}', "
         result += ", ".join(map(str, self._args))
-        # attributes
-        result += ", ".join([f"{key}={repr(val)}" for key, val in self._attrs.items()])
+        if len(self._attrs) > 0:
+            result += ", "
+            result += ", ".join([f"{key}={repr(val)}" for key, val in self._attrs.items()])
         return result + ")"
