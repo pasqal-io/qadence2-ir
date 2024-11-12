@@ -54,3 +54,9 @@ def model_with_directives_settings(simple_model: Model) -> Model:
     new_model.directives = {"option1": 3, "option2": True}
     new_model.settings = {"setting1": 18.0}
     return new_model
+
+
+@pytest.fixture
+def asts_for_arithmetic() -> tuple[AST, AST]:
+    return (AST.numeric(0.5 + 1j), AST.quantum_op("CNOT", (0,), (1,)))
+
