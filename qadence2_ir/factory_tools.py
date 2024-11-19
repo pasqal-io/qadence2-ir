@@ -58,6 +58,7 @@ def flatten_ast(ast: AST) -> Iterable[AST]:
     ]
     ```
     """
+    # TODO update example because binar_op is not supported
 
     for arg in ast.args:
         if isinstance(arg, AST):
