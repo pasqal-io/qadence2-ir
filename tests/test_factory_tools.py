@@ -33,9 +33,12 @@ def test_flatten_ast(classical_ast: AST) -> None:
     assert res == [x, three, div, x, fn]
 
 
-def test_extract_inputs(classical_ast: AST) -> None:
+def test_extract_inputs(classical_ast: AST, quantum_ast: AST) -> None:
+    expected = {"x": Alloc(1, False)}
     res = extract_inputs_variables(classical_ast)
-    assert res == {"x": Alloc(1, False)}
+    assert res == expected
+    res2 = extract_inputs_variables(classical_ast)
+    assert res2 == expected
 
 
 def test_build_instructions(quantum_ast: AST) -> None:
