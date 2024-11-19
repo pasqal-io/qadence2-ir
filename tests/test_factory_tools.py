@@ -10,6 +10,19 @@ from qadence2_ir.irast import AST
 from qadence2_ir.types import Alloc, Assign, Call, Load, QuInstruct, Support
 
 
+def test_filter_ast(classical_ast: AST) -> None:
+    # Flat ast
+    x = AST.input_variable("x", 1, False)
+    assert [x] == list(filter_ast(lambda ast: ast.is_input_variable, x))
+    assert [] == list(filter_ast(lambda ast: ast.is_callable, x))
+
+    # Nested ast
+    assert list(filter_ast(lambda x: x.is_input_variable, classical_ast)) == [x, x]
+    nested_ast = AST.callable("div", AST.numeric(8), AST.numeric(3))
+    expected = [AST.numeric(8), AST.numeric(3)]
+    assert expected == list(filter_ast(lambda ast: ast.is_numeric, nested_ast))
+
+
 def test_flatten_ast(classical_ast: AST) -> None:
     x = AST.input_variable("x", 1, False)
     three = AST.numeric(3)
@@ -18,13 +31,6 @@ def test_flatten_ast(classical_ast: AST) -> None:
 
     res = list(flatten_ast(classical_ast))
     assert res == [x, three, div, x, fn]
-
-
-def test_filter_ast(classical_ast: AST) -> None:
-    x = AST.input_variable("x", 1, False)
-
-    res = list(filter_ast(lambda x: x.is_input_variable, classical_ast))
-    assert res == [x, x]
 
 
 def test_extract_inputs(classical_ast: AST) -> None:
