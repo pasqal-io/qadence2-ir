@@ -5,6 +5,7 @@ from qadence2_ir.factory_tools import (
     extract_inputs_variables,
     filter_ast,
     flatten_ast,
+    to_alloc,
 )
 from qadence2_ir.irast import AST
 from qadence2_ir.types import Alloc, Assign, Call, Load, QuInstruct, Support
@@ -39,6 +40,17 @@ def test_extract_inputs(classical_ast: AST, quantum_ast: AST) -> None:
     assert res == expected
     res2 = extract_inputs_variables(classical_ast)
     assert res2 == expected
+
+
+def test_to_alloc() -> None:
+    ast = AST.input_variable("x", 1, False)
+    inputs = {"x": Alloc(1, False)}
+    # Test if added to inputs
+    assert to_alloc({}, ast) == inputs
+    # Test if not added twice
+    assert to_alloc(inputs, ast) == inputs
+    # Test if not input variable
+    assert to_alloc({}, AST.callable("my-func")) == {}
 
 
 def test_build_instructions(quantum_ast: AST) -> None:
