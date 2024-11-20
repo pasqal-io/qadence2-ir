@@ -24,10 +24,10 @@ def test_input_variable() -> None:
 
 
 def test_callable() -> None:
-    ast = AST.callable("my-func", 2, "magic")
+    ast = AST.callable("my-func", AST.numeric(3), AST.input_variable("my-var", 1, False))
     assert ast.tag == ast.Tag.Call
     assert ast._head == "my-func"
-    assert ast._args == (2, "magic")
+    assert ast._args == (AST.numeric(3), AST.input_variable("my-var", 1, False))
     assert ast.is_callable
 
 
@@ -92,7 +92,7 @@ def test_eq() -> None:
     # Same tag and head
     assert AST.numeric(2) == AST.numeric(2)
     # Same tag and head but different args
-    assert AST.callable("my-func", 9, 4) != AST.callable("my-func", 8, 2)
+    assert AST.callable("my-func", AST.numeric(3)) != AST.callable("my-func", AST.numeric(4))
     # Same tag and head but different kwargs
     assert AST.input_variable("my-var", 1, True, kwarg=8) != AST.input_variable(
         "my-var", 1, True, kwarg=2
