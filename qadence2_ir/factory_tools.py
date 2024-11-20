@@ -24,6 +24,7 @@ def filter_ast(predicate: Callable[[AST], bool], ast: AST) -> Iterable[AST]:
     [AST.numeric(2), AST.numeric(3)]
     ````
     """
+    # TODO edit example: binar_op is not available in AST
 
     if predicate(ast):
         yield ast
@@ -57,6 +58,7 @@ def flatten_ast(ast: AST) -> Iterable[AST]:
     ]
     ```
     """
+    # TODO update example because binar_op is not supported
 
     for arg in ast.args:
         if isinstance(arg, AST):

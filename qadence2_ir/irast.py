@@ -99,7 +99,7 @@ class AST:
         return cls.__construct__(cls.Tag.InputVariable, name, size, trainable, **attributes)
 
     @classmethod
-    def callable(cls, name: str, *args: Any) -> AST:
+    def callable(cls, name: str, *args: AST) -> AST:
         """Create an AST-function object.
 
         Args:
