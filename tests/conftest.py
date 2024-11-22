@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from dataclasses import dataclass
+from typing import Any
 
 import pytest
 
-from qadence2_ir.irast import AST
+from qadence2_ir.factory import IRBuilder
+from qadence2_ir.irast import AST, Attributes
 from qadence2_ir.types import Alloc, AllocQubits, Assign, Model, QuInstruct, Support
 
 
@@ -59,3 +62,34 @@ def model_with_directives_settings(simple_model: Model) -> Model:
 @pytest.fixture
 def asts_for_arithmetic() -> tuple[AST, AST]:
     return (AST.numeric(0.5 + 1j), AST.quantum_op("CNOT", (0,), (1,)))
+
+
+@dataclass
+class InputTypeTest:
+    qubit_count: int
+    directives: dict[str, Any]
+    settings: dict[str, Any]
+    ast: AST
+
+
+class IRBuilderTest(IRBuilder[InputTypeTest]):
+    @staticmethod
+    def set_register(input_obj: InputTypeTest) -> AllocQubits:
+        return AllocQubits(input_obj.qubit_count)
+
+    @staticmethod
+    def set_directives(input_obj: InputTypeTest) -> Attributes:
+        return input_obj.directives
+
+    @staticmethod
+    def settings(input_obj: InputTypeTest) -> Attributes:
+        return input_obj.settings
+
+    @staticmethod
+    def parse_sequence(input_obj: InputTypeTest) -> AST:
+        return input_obj.ast
+
+
+@pytest.fixture
+def builder() -> IRBuilderTest:
+    return IRBuilderTest()
