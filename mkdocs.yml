@@ -12,6 +12,12 @@ nav:
       - Code of conduct: getting_started/CODE_OF_CONDUCT.md
       - License: getting_started/LICENSE.md
 
+  - Contents:
+    - TBD: contents/tbd.md
+
+  - Tutorials:
+    - tutorials/index.md
+
 
 theme:
   name: material
