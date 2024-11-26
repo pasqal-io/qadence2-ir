@@ -15,9 +15,15 @@ nav:
   - Contents:
     - TBD: contents/tbd.md
 
-  - Tutorials:
-    - tutorials/index.md
+  # - Tutorials:
+  #   - tutorials/index.md
 
+  - API:
+    - api/factory.md
+    - api/types.md
+    - api/irast.md
+    - api/irbuilder.md
+    - api/factory_tools.md
 
 theme:
   name: material
