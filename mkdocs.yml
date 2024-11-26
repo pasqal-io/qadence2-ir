@@ -15,6 +15,7 @@ nav:
 
 theme:
   name: material
+  custom_dir: docs/extras/overrides
   features:
   - content.code.annotate
   - content.action.view
@@ -78,6 +79,8 @@ extra:
 # To get nice tabs
 extra_css:
 - css/mkdocstrings.css
+- extras/css/colors.css
+- extras/css/home.css
 
 # For mathjax
 extra_javascript:
