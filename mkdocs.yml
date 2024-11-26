@@ -19,6 +19,7 @@ nav:
     - tutorials/index.md
 
   - API:
+    - api/index.md
     - api/factory.md
     - api/types.md
     - api/irast.md
