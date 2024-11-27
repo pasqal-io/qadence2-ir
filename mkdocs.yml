@@ -16,7 +16,7 @@ nav:
     - TBD: contents/tbd.md
 
   - Tutorials:
-    - tutorials/index.md
+    - Tutorials: tutorials/index.md
 
   - API:
     - api/index.md
