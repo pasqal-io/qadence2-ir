@@ -72,5 +72,5 @@ class IRBuilder(ABC, Generic[InputType]):
             input_obj: Input for the compilation to IR native to a specific front-end.
 
         Returns:
-            An AST definition that represents the operations defined in `input_obj`.
+            An AST definition that represents the operations defined in an `input_obj`.
         """
