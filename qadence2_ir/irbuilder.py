@@ -1,3 +1,11 @@
+"""Defines an ABC for implementing IR builders.
+
+This module defines the interface to be used by Qadence 2 IR front-ends to compile to IR. A front-
+end must implement an `IRBuilder` for the front-end specific input type, so that
+`ir_compiler_factory`, defined in `qadence2-ir.factory` can generate a compiler function specific
+to the front-end.
+"""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -8,32 +16,61 @@ from .types import AllocQubits
 
 
 class IRBuilder(ABC, Generic[InputType]):
-    """A base class to help create new input forms for Qadence2-IR.
+    """Defines the interface of Qadence 2 IR builders for building IR code from front-end input.
 
-    Implementing this class allows the function `ir_compiler_factory` to generate
-    the `compile_to_model` function for a new custom input format.
+    An `IRBuilder` implementation can be used by the `ir_compiler_factory` function, defined in
+    `qadence2-ir.factory` to build a compiler function that generates IR code from a specific
+    input type as created by a Qadence 2 front-end.
+    When subclassing this class, specify the `InputType` that is expected for the implementation,
+    i.e. the object type that the specific front-end generates.
+    This class is responsible for extracting information about the register, directives, other
+    settings and the AST from front-end generated input.
     """
 
     @staticmethod
     @abstractmethod
     def set_register(input_obj: InputType) -> AllocQubits:
-        """Used by the factory to define/extract/infere the qubits register primarily from the
-        `input_obj`.
+        """Returns a register definition based on an input object.
+
+        Args:
+            input_obj: Input for the compilation to IR native to a specific front-end.
+
+        Returns:
+            A register definition that is extracted or inferred from `input_obj`.
         """
 
     @staticmethod
     @abstractmethod
     def set_directives(input_obj: InputType) -> Attributes:
-        """Use by the factory to set the QPU directives from the input."""
+        """Returns directives based on an input object.
+
+        Args:
+            input_obj: Input for the compilation to IR native to a specific front-end.
+
+        Returns:
+            A specification of all directives that could be extracted from `input_obj`.
+        """
 
     @staticmethod
     @abstractmethod
     def settings(input_obj: InputType) -> Attributes:
-        """Used by the factory to define general settings for simulation and data purposes."""
+        """Returns settings based on an input object.
+
+        Args:
+            input_obj: Input for the compilation to IR native to a specific front-end.
+
+        Returns:
+            A specification of all settings that could be extracted from `input_obj`.
+        """
 
     @staticmethod
     @abstractmethod
     def parse_sequence(input_obj: InputType) -> AST:
-        """Used by the factory to parse a sequence operations acting on the qubit
-        register (e.g., quantum circuits, pulse sequences, etc).
+        """Returns an AST definition that represents the operations in input object.
+
+        Args:
+            input_obj: Input for the compilation to IR native to a specific front-end.
+
+        Returns:
+            An AST definition that represents the operations defined in `input_obj`.
         """
