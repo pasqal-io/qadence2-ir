@@ -137,8 +137,8 @@ class Support:
     operation for each index in the support. Both target and control lists must be ordered!
 
     Args:
-        target = Index or indices of qubits to which the operation is applied.
-        control = Index or indices of qubits which to which the operation is conditioned to.
+        target: Index or indices of qubits to which the operation is applied.
+        control: Index or indices of qubits which to which the operation is conditioned to.
     """
 
     def __init__(
