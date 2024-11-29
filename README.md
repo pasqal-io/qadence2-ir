@@ -56,4 +56,4 @@ Before making a contribution, please review our [code of conduct](docs/getting_s
 
 ## License
 
-Qadence Expressions is a free and open source software package, released under the Apache License, Version 2.0.
+Qadence 2 IR is a free and open source software package, released under the Apache License, Version 2.0.
