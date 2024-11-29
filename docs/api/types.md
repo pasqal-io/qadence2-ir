@@ -1,3 +1,5 @@
+# Types
+
 !!! warning
 	This page is under construction.
 
