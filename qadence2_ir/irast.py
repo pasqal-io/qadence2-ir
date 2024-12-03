@@ -98,7 +98,7 @@ class AST:
         """Create an AST-numeric object.
 
         Args:
-            value: Numerical value to be converted in the Qadence-IR AST.
+            value: Numerical value to be converted in the Qadence2-IR AST.
 
         Returns:
             ast: A numerical value AST.
