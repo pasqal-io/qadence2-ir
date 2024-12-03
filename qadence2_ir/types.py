@@ -27,7 +27,7 @@ class Alloc:
 
     With this class an allocation of memory is made for a parameter that is a scalar value, if
     `size = 1` or an array of values of length `n` if `size = n`. The type for the allocation is
-    defined by the backend, therefor it is not defined in the IR.
+    defined by the backend, therefore it is not defined in the IR.
 
     Args:
         size: Number of values stored in the parameter, if `size = 1` the parameter is a scalar
