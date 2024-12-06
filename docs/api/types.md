@@ -1,4 +1,3 @@
-!!! warning
-	This page is under construction.
+# Types
 
 ::: qadence2_ir.types

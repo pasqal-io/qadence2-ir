@@ -1,16 +1,38 @@
+"""Definition of all types supported in the IR.
+
+This module is the defacto definition of the IR. A unit of IR code can only consist of instances of
+the classes defined in this module. An IR `Model` defines a complete set of instructions for a
+backend to execute as a task. The instructions a `Model` can take can be divided into two groups;
+classical and quantum related instructions:
+
+- Classical:
+    - `Alloc`: Allocates memory for holding variable values.
+    - `Assign`: Assigns a value to a variable.
+    - `Load`: Retrieves a value from a variable.
+    - `Call`: Executes a classical function.
+- Quantum:
+    - `AllocQubits`: Allocates qubits for the computation.
+    - `QuInstruct`: Executes a quantum instruction.
+    - `Support`: Defines on which qubit(s) and with what role, target or control, a `QuInstruct`
+        should act.
+"""
+
 from __future__ import annotations
 
 from typing import Any, Literal
 
 
 class Alloc:
-    """
-    Reserve one slot for a scaler parameter in the environment and n-slots for an array. The type of
-    the parameter is defined by the backend.
+    """Memory allocation for a parameter that is either a scalar value or an array of values.
+
+    With this class an allocation of memory is made for a parameter that is a scalar value, if
+    `size = 1` or an array of values of length `n` if `size = n`. The type for the allocation is
+    defined by the backend, therefore it is not defined in the IR.
 
     Args:
-        size: Space occupied by the parameter.
-        trainable: Flag if the parameter can change during a training loop.
+        size: Number of values stored in the parameter, if `size = 1` the parameter is a scalar
+            value if `size > 1` the parameter is an array of values.
+        trainable: Indicates whether the parameter can be changed during a training loop.
         attributes: Extra flags and information to be used as instructions/suggestions by the
             backend.
     """
@@ -36,7 +58,12 @@ class Alloc:
 
 
 class Assign:
-    """Push a variable to the environment and assign a value to it."""
+    """Assignment of a value to a variable.
+
+    Args:
+        variable_name: The name of the variable to assign a value to.
+        value: The value to be assigned to the variable.
+    """
 
     def __init__(self, variable_name: str, value: Any) -> None:
         self.variable = variable_name
@@ -55,7 +82,11 @@ class Assign:
 
 
 class Load:
-    """To recover the value of a given variable."""
+    """Instruction to load the value of a variable.
+
+    Args:
+        variable_name: The name of the variable to load.
+    """
 
     def __init__(self, variable_name: str) -> None:
         self.variable = variable_name
@@ -71,7 +102,12 @@ class Load:
 
 
 class Call:
-    """Indicates the call of classical functions only."""
+    """Instruction to call a classical function.
+
+    Args:
+        identifier: The identifier of the function to call, i.e. its name.
+        args: The arguments that the function should be called with.
+    """
 
     def __init__(self, identifier: str, *args: Any) -> None:
         self.identifier = identifier
@@ -94,14 +130,15 @@ class Call:
 
 
 class Support:
-    """Generic representation of the qubit support. For single qubit operations, a multiple index
-    support indicates apply the operation for each index in the support.
+    """Instruction that specifies the target and optionally control of a `QuInstruct`.
 
-    Both target and control lists must be ordered!
+    Generic representation of qubit support, specifying a target and control for a quantum
+    instruction. For single qubit operations, a multiple index support indicates apply the
+    operation for each index in the support. Both target and control lists must be ordered!
 
     Args:
-        target = Index or indices where the operation is applied.
-        control = Index or indices to which the operation is conditioned to.
+        target: Index or indices of qubits to which the operation is applied.
+        control: Index or indices of qubits which to which the operation is conditioned to.
     """
 
     def __init__(
@@ -136,7 +173,7 @@ class Support:
 
 
 class QuInstruct:
-    """An abstract representation of a QPU instruction.
+    """Instruction to apply a quantum operation to one or more qubit(s).
 
     Args:
         name: The instruction name compatible with the standard instruction set.
@@ -171,14 +208,13 @@ class QuInstruct:
 
 
 class AllocQubits:
-    """
-    Describes the register configuration in a neutral-atoms device.
+    """Allocation of qubit in a register of a neutral-atom QPU.
 
     Args:
-        num_qubits: Number of atoms to be allocated.
-        qubit_positions: A list of discrete coordinates for 2D grid with (0,0) position at center
-            of the grid. A list of indices in a linear register. An empty list will indicate the
-            backend is free to define the topology for devices that implement logical qubits.
+        num_qubits: Number of qubits, i.e atoms, to be allocated.
+        qubit_positions: A list of discrete coordinates for 2D grid, where (0,0) is the position at
+            center of the grid. An empty list will indicate the backend is free to define the
+            topology for devices that implement logical qubits.
         grid_type: Allows to select the coordinates sets for 2D grids as "square" (orthogonal) or
             "triangular" (skew). A "linear" will allow the backend to define the shape of the
             register. When the `grid_type` is `None` the backend uses its default structure
@@ -238,14 +274,15 @@ class AllocQubits:
 
 
 class Model:
-    """Aggregates the minimal information to construct sequence of instructions in a quantum device.
-    The structure is mainly focused in neutral atoms devices but its agnostic nature may make it
-    suitable for any quantum device.
+    """Aggregates the minimal information to construct sequence of instructions to execute on a QPU.
+
+    This class defines a unit of IR code. The structure of the class is mainly focused in neutral
+    atoms devices but its agnostic nature may make it suitable for any quantum device.
 
     Args:
-        register: Describe the atomic arrangement of the neutral atom register.
-        instructions:  A list of abstract instructions with their arguments with which a backend
-            can execute a sequence.
+        register: Describes the atomic arrangement of the neutral atom register.
+        instructions: A list of abstract instructions with their arguments that a backend can use
+            to execute a sequence.
         directives: A dictionary containing QPU related options. For instance, it can be used to
             set the Rydberg level to be used or whether to allow digital-analog operations in the
             sequence.

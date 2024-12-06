@@ -1,5 +1,3 @@
-!!! warning
-	This page is under construction.
-
+# Factory Tools
 
 ::: qadence2_ir.factory_tools

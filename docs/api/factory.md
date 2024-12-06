@@ -1,4 +1,3 @@
-!!! warning
-	This page is under construction.
+# Factory
 
 ::: qadence2_ir.factory

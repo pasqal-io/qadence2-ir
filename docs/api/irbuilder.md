@@ -1,4 +1,3 @@
-!!! warning
-	This page is under construction.
+# IR Builder
 
 ::: qadence2_ir.irbuilder
