@@ -1,6 +1,6 @@
 # Challenges
 
-As pointed out above, digital and analog algorithms diverge in how they handle register topology. Contrary to classical computing, where the resource allocation can be left to the OS to control, the quantum resources must be explicit in analog quantum computation.
+As pointed out [here](./ir_structure.md), digital and analog algorithms diverge in how they handle register topology. Contrary to classical computing, where the resource allocation is typically left to the OS to control, the quantum resources are explicit in this analog quantum computating IR.
 
 For digital devices and circuit-based algorithms, the register topology is important mostly during the compilation phase to reduce the number of SWAP gates applied. Analog algorithms and devices, on the other hand, rely on the topology to ensure the proper interaction between qubits regarding connectivity and strength. That led us to consider including the abstract representation of the register (either by unitless coordinates or connectivity graph) as part of the IR.
 
