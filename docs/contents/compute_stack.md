@@ -7,4 +7,4 @@ The top layer is user-facing, with the highest level of abstraction. For each fr
 It's important to note that the Qadence 2 IR layer spreads over the full width of the stack, meaning that all front-ends can compile to it and any backend can be targeted from it. The two-step compilation approach reduces the coupling between elements in the stack significantly and makes the codebase, therefore, more maintainable.
 
 ![Qadence 2 stack](qadence2_stack.png)
-Figure 1: The Qadence 2 software stack.
+**Figure 1:** The Qadence 2 software stack.
