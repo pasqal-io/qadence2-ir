@@ -19,7 +19,7 @@ nav:
     - Challenges: contents/challenges.md
 
   - Tutorials:
-    - Tutorials: tutorials/index.md
+    - Tutorials: tutorials/examples.md
 
   - API:
     - api/index.md

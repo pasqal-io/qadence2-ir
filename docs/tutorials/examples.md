@@ -1,8 +1,8 @@
-## Examples
+# Examples
 The following examples were generate to present some possible algorithms and may not be
 fully implementable in the hardware at the moment.
 
-### Example digital input.
+## Example digital input.
 ```python
 Model(
     register = AllocQubits(2),
@@ -11,7 +11,7 @@ Model(
     inputs = {
         "x": Alloc(1, trainable=True),
     },
-    instrunctions = [
+    instructions = [
 
         # data encoding
         Assign("%0", Call("mul", 0.5, Load("x"))),
@@ -23,7 +23,7 @@ Model(
 )
 ```
 
-### Example digital-analog input.
+## Example digital-analog input.
 ```python
 Model(
     register = AllocQubits(4),
@@ -56,7 +56,7 @@ Model(
 )
 ```
 
-### Example analog input.
+## Example analog input.
 ```python
 Model(
     register = AllocQubits(
@@ -101,7 +101,7 @@ Model(
 )
 ```
 
-### Example analog input (alternative)
+## Example analog input (alternative)
 This example is intend to be used with backends that either support crossing-lattice  or similar
 algorithms, or gridless backends (e.g. PyQ).
 ```python
