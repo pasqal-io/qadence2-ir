@@ -1,4 +1,3 @@
-!!! warning
-	This page is under construction.
+# IRAST
 
 ::: qadence2_ir.irast

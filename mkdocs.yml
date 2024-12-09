@@ -13,10 +13,13 @@ nav:
       - License: getting_started/LICENSE.md
 
   - Contents:
-    - TBD: contents/tbd.md
+    - contents/index.md
+    - Compute Stack: contents/compute_stack.md
+    - IR Structure: contents/ir_structure.md
+    - Challenges: contents/challenges.md
 
   - Tutorials:
-    - Tutorials: tutorials/index.md
+    - Tutorials: tutorials/examples.md
 
   - API:
     - api/index.md

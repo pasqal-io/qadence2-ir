@@ -1,3 +1,9 @@
+"""Tools to process an `AST` as used by the compiler factory in `qadence2-ir.factory`.
+
+This module defines a collection of functions that manipulate an `AST`. Using these AST manipulation
+tools the factory function in `qadence2-ir.factory` can build the instruction list from a given AST.
+"""
+
 from __future__ import annotations
 
 from functools import reduce
@@ -8,23 +14,23 @@ from .types import Alloc, Assign, Call, Load, QuInstruct, Support
 
 
 def filter_ast(predicate: Callable[[AST], bool], ast: AST) -> Iterable[AST]:
-    """Filter the elements of the AST according to the `predicate` function.
+    """Filters the elements of the AST according to the `predicate` function.
 
     Args:
-        predicate: A function to check if a specific property is present in the `ast`.
-        ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
+        predicate: A function that checks if a specific property is present in the `ast`.
+        ast: A parsed AST containing the sequence of instructions to be added to the `Model`.
 
-    Return:
+    Returns:
         An iterable and flattened version of the AST that contains the selected elements.
 
     Example:
-    ```
-    >>> ast = AST.binar_op("/", AST.numeric(2), AST.callable("fn", AST.numeric(3)))
+
+    ```python
+    >>> ast = AST.div(AST.numeric(2), AST.callable("fn", AST.numeric(3)))
     >>> list(filter_ast(lambda x: x.is_numeric, ast))
     [AST.numeric(2), AST.numeric(3)]
-    ````
+    ```
     """
-    # TODO edit example: binar_op is not available in AST
 
     if predicate(ast):
         yield ast
@@ -37,18 +43,18 @@ def filter_ast(predicate: Callable[[AST], bool], ast: AST) -> Iterable[AST]:
 
 
 def flatten_ast(ast: AST) -> Iterable[AST]:
-    """Returns an interable and flattened version of the AST.
+    """Returns an iterable and flattened version of the AST.
 
     Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
-    Return:
+    Returns:
         An iterable and flattened version of the AST. The arguments of operations/functions will
         appear before the operation/function.
 
     Example:
-    ```
-    >>> ast = AST.binar_op("/", AST.numeric(2), AST.callable("fn", AST.numeric(3)))
+    ```python
+    >>> ast = AST.div(AST.numeric(2), AST.callable("fn", AST.numeric(3)))
     >>> list(flatten_ast(ast))
     [
         AST.numeric(2),
@@ -74,7 +80,7 @@ def extract_inputs_variables(ast: AST) -> dict[str, Alloc]:
     Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
-    Return:
+    Returns:
         A dictionary with the variables names as keys and their respective allocation instructions
         as values.
     """
@@ -83,11 +89,11 @@ def extract_inputs_variables(ast: AST) -> dict[str, Alloc]:
 
 
 def to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
-    """If the `ast` is an input variable, add it to the inputs to be allocated
-    if not present yet.
+    """If the `ast` is an input variable, add it to the inputs to be allocated if not present yet.
 
     Args:
-        inputs: A dictionary containing pairs of variables and their allocation instructions.
+        inputs: A dictionary containing pairs of variables and their allocation instructions, which
+            are already allocated.
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
     Return
@@ -107,13 +113,12 @@ def to_alloc(inputs: dict[str, Alloc], ast: AST) -> dict[str, Alloc]:
 
 
 def build_instructions(ast: AST) -> list[QuInstruct | Assign]:
-    """Converts a sequence of instructions in the AST form into a list of Model
-    instructions.
+    """Converts an AST into a list of `Model` instructions.
 
     Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
 
-    Return:
+    Returns:
         A list of quantum operations and temporary static single-assigned variables. Temporary
         variables store the outcomes of classical operations and are used as arguments for
         parametric quantum operations.
@@ -131,12 +136,11 @@ def to_instruct(
     memoise: dict[AST, Load],
     single_assign_index: int,
 ) -> tuple[list[QuInstruct | Assign], dict[AST, Load], int]:
-    """Add the `ast` to the `instructions_list` if `ast` is a classical function
-    or a quantum instruction.
+    """Adds the `ast` to the `instructions_list` if it is a `Call` or `QuInstruct`.
 
-    When the `ast` is a classical function, it uses the `single_assign_index` to
-    assign the call to a temporary variable using memoisation to avoid duplicated
-    assignments.
+    When the `ast` is a classical function, it uses the `single_assign_index` to assign the call to
+    a temporary variable using memoisation to avoid duplicated assignments. If the `ast` is a
+    quantum instruction, the instruction will be added to the instruction list.
 
     Args:
         ast: A parsed tree containing the sequence of instructions to be added to the `Model`.
@@ -147,8 +151,8 @@ def to_instruct(
         single_assign_index: The index to be used by the next temporary variable assignement.
             Tempmorary variables are labled from "%0" to "%n".
 
-    Return:
-        A tuple consists of an updated list of instructions and assignments, a dictionary of pairs
+    Returns:
+        A tuple consisting of an updated list of instructions and assignments, a dictionary of pairs
         of AST objects and temporary variables, and the updated index for the next assignment.
     """
 
