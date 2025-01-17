@@ -8,6 +8,8 @@
 
 Qadence 2 IR specifies an intermediate representation for Qadence 2. Front-ends, like [Qadence 2 Expressions](https://github.com/pasqal-io/qadence2-expressions), can compile to the IR and backends, like [Pulser](http://github.com/pasqal-io/pulser) or [PyQTorch](https://github.com/pasqal-io/pyqtorch) can be targeted from the IR using [Qadence 2 Platforms](https://github.com/pasqal-io/qadence-platforms).
 
+![Coverage](https://img.shields.io/codecov/c/github/pasqal-io/qadence2-ir?style=flat-square)
+
 ## Installation
 
 !!! note
